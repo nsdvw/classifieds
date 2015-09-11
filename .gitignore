@@ -1,0 +1,7 @@
+assets/
+tests/
+protected/runtime/*
+protected/vendor/*
+upload/*
+!.gitkeep
+!.gitignore
