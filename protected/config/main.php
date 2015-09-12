@@ -39,6 +39,12 @@ return array(
 			'allowAutoLogin'=>true,
 		),
 
+		'viewRenderer' => array(
+			'class' => 'application.vendor.yiiext.twig-renderer.ETwigViewRenderer',
+			'twigPathAlias' => 'application.vendor.twig.twig.lib.Twig',
+			'fileExtension' => '.twig',
+		),
+
 		// uncomment the following to enable URLs in path-format
 		/*
 		'urlManager'=>array(
