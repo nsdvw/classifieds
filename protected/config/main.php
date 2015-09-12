@@ -17,6 +17,9 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'application.vendor.iachilles.eavactiverecord.*',
+		'application.vendor.iachilles.eavactiverecord.datatypes.*',
+		'application.vendor.iachilles.eavactiverecord.helpers.*'
 	),
 
 	'modules'=>array(
@@ -45,17 +48,22 @@ return array(
 			'fileExtension' => '.twig',
 		),
 
+		'eavCache' => array(
+			'class' => 'system.caching.CDummyCache'
+		),
+
 		// uncomment the following to enable URLs in path-format
-		/*
+		
 		'urlManager'=>array(
 			'urlFormat'=>'path',
+			'showScriptName'=>false,
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			),
 		),
-		*/
+		
 
 		// database settings are configured in database.php
 		'db'=>require(dirname(__FILE__).'/database.php'),
