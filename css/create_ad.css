@@ -1,0 +1,18 @@
+.category-select {
+    width: 100%;
+}
+.first-level,
+.second-level,
+.third-level {
+    vertical-align: top;
+    box-sizing: border-box;
+    width: 33%;
+    padding: 0px 15px;
+}
+.first-level,
+.second-level {
+    border-right: 1px solid #C9E0ED;
+}
+.category-select li {
+    margin-bottom: 5px;
+}

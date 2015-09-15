@@ -1,0 +1,25 @@
+{% extends 'views/layouts/main.twig' %}
+
+{% block content %}
+<div class="span-19">
+	<div id="content">
+		{% block view %}{% endblock view %}
+	</div><!-- content -->
+</div>
+<div class="span-5 last">
+	<div id="sidebar">
+	{{ Yii.void(this.beginWidget('zii.widgets.CPortlet', {
+			'title':'Operations'
+		}, true)) }}
+	{{	this.widget('zii.widgets.CMenu', {
+			'items': [
+                        {'label':'Home', 'url':['/post']},
+                        {'label':'About', 'url':{0:'/site/page', 'view':'about'} },
+                        {'label':'Contact', 'url':['/site/contact']}
+                    ],
+			'htmlOptions': {'class':'operations'}
+		}, true) }}
+	{{	Yii.void(this.endWidget()) }}
+	</div><!-- sidebar -->
+</div>
+{% endblock content %}

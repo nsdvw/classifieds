@@ -1,0 +1,78 @@
+{% extends 'views/layouts/main.twig' %}
+
+{% block content %}
+<h3>Выберите категорию</h3>
+{{ Yii.void(App.clientScript.registerCoreScript('jquery')) }}
+{{ Yii.void(App.clientScript.registerCssFile(App.request.baseUrl~'/css/create_ad.css')) }}
+{#{ Yii.void(App.clientScript.registerScriptFile(App.request.baseUrl~'/js/create_ad.js')) }#}
+<table class="category-select">
+    <tr>
+        <td class="first-level">
+        <ul>
+        {% for model in models %}
+        <li>
+        <a class="category-link" href="{{ App.request.baseUrl~'/ad/create/'~model.id }}"
+            data-id="{{model.id}}">{{model.title}}</a>
+        </li>
+        {% endfor %}
+        </ul>
+        </td>
+        <td class="second-level">
+            <ul></ul>
+        </td>
+        <td class="third-level">
+            <ul></ul>
+        </td>
+    </tr>
+</table>
+<script>
+$(".first-level").on("click", function(event){
+    event.preventDefault();
+    if (!$(event.target).hasClass('category-link')) return;
+    var id = $(event.target).attr('data-id');
+    $.ajax('/ad/getcategories', {
+        data:'id='+id,
+        method:'POST',
+        dataType:'json',
+        success: function(data){
+            var child = $('.second-level>ul');
+            var grandchild = $('.third-level>ul');
+            child.html('');
+            grandchild.html('');
+            if (data==false) {
+                window.location.href = window.location.origin + '/ad/create/' + id;
+            }
+            $.each(data, function(i, val){
+                child.append('<li><a class="category-link" href="'
+                 + window.location.origin + '/ad/create/' + i
+                 +'" data-id="'+i+'">'
+                 + val + '</a></li>');
+            });
+        }
+    });
+});
+$(".second-level").on("click", function(event){
+    event.preventDefault();
+    if (!$(event.target).hasClass('category-link')) return;
+    var id = $(event.target).attr('data-id');
+    $.ajax('/ad/getcategories', {
+        data:'id='+id,
+        method:'POST',
+        dataType:'json',
+        success: function(data){
+            var child = $('.third-level>ul');
+            child.html('');
+            if (data==false) {
+                window.location.href = window.location.origin + '/ad/create/' + id;
+            }
+            $.each(data, function(i, val){
+                child.append('<li><a class="category-link" href="'
+                 + window.location.origin + '/ad/create/' + i
+                 +'" data-id="'+i+'">'
+                 + val + '</a></li>');
+            });
+        }
+    });
+});
+</script>
+{% endblock content %}
