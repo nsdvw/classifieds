@@ -70,11 +70,9 @@ class AdController extends Controller
 			echo json_encode(array());
 			Yii::app()->end();
 		}
-		//echo 'id='.$_POST['id'].',level='.$_POST['level'];
 		$id = intval($_POST['id']);
 		$parent_cat = Category::model()->findByPk($id);
-		//echo json_encode(array($parent_cat->title));
-		$criteria = new CDbCriteria;
+		/*$criteria = new CDbCriteria;
 		$criteria->condition = 'root=:root AND lft>:lft AND rgt<:rgt AND level=:level';
 		$criteria->params = array(
 			':root'=>$parent_cat->root,
@@ -82,7 +80,8 @@ class AdController extends Controller
 			':rgt'=>$parent_cat->rgt,
 			':level'=>++$parent_cat->level,
 		);
-		$children = Category::model()->findAll($criteria);
+		$children = Category::model()->findAll($criteria);*/
+		$children = $parent_cat->children()->findAll();
 		if (!$children) {
 			echo json_encode(array());
 			Yii::app()->end();
@@ -99,21 +98,33 @@ class AdController extends Controller
 	 */
 	public function actionCreate($id)
 	{
-		$model=new Ad;
-		echo 'Hello! The category id was '.$id;
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$model = new Ad;
+		$category = Category::model()->findByPk($id);
+		$children = $category->children()->findAll();
+		$children = CHtml::listData($children, 'id', 'title');
+		$hasChildren = ($children) ? true : false; 
+		$model->attachEavSet($category->set_id);
+		$model->category_id = $id;
 
-		/*if(isset($_POST['Ad']))
-		{
-			$model->attributes=$_POST['Ad'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+		$lists = array('category' => $children);
+		foreach ($model->eavAttributes as $key => $value) {
+			$attribute = EavAttribute::model()->findByAttributes(array('name'=>$key));
+			$variants =	AttrVariant::model()->findAllByAttributes(
+				array('attr_id'=>$attribute->id)
+			);
+			if (!$variants) continue;
+			$lists[$key] = CHtml::listData($variants, 'title', 'title');
 		}
 
+		if (isset($_POST['Ad'])) {
+			$model->attributes=$_POST['Ad'];
+			if($model->saveWithEavAttributes())
+				$this->redirect(array('view','id'=>$model->id));
+		}
+		//var_dump($lists);
 		$this->render('create',array(
-			'model'=>$model,
-		));*/
+			'model'=>$model, 'hasChildren'=>$hasChildren, 'lists'=>$lists
+		));
 	}
 
 	/**

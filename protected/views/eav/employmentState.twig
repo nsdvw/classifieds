@@ -1,0 +1,5 @@
+<div class="row">
+    {{ C.Html.activeLabel(model, 'employmentState') }}
+    {{ C.Html.activeDropDownList(model, 'employmentState', lists['employmentState'], {'empty':'выбрать'}) }}
+    {{ C.Html.error(model, 'employmentState') }}
+</div>

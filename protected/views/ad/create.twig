@@ -1,9 +1,33 @@
 {% extends 'views/layouts/main.twig' %}
 
 {% block content %}
-{#
-{{ Yii.import('application.vendor.iachilles.eavactiverecord.helpers.EavForm') }}
-{{ this.widget('EavForm', {'model': model}, true) }}
-#}
-Тест
+
+<div class="form">
+{% set form = this.beginWidget('CActiveForm') %}
+{{ form.errorSummary(model) }}
+{% if hasChildren %}
+    {% include 'views/ad/_subcategory.twig' %}
+{% else %}
+    {% include 'views/ad/_inputhidden.twig' %}
+{% endif %}
+<div class="row">
+    {{ form.labelEx(model, 'title') }}
+    {{ form.textField(model, 'title') }}
+    {{ form.error(model, 'title') }}
+</div>
+<div class="row">
+    {{ form.labelEx(model, 'description') }}
+    {{ form.textField(model, 'description') }}
+    {{ form.error(model, 'description') }}
+</div>
+{#{ this.widget('EavForm', {'model': model}, true) }#}
+{% for key in model.eavAttributes|keys %}
+    {% include 'views/eav/'~key~'.twig' ignore missing %}
+{% endfor %}
+<div class="row buttons">
+    {{ C.Html.submitButton() }}
+</div>
+{{ Yii.void(this.endWidget()) }}
+</div>
+
 {% endblock content %}

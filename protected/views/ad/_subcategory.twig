@@ -1,0 +1,5 @@
+<div class="row">
+    {{ form.labelEx(model, 'category_id') }}
+    {{ form.dropDownList(model, 'category_id', lists['category'], {'empty':'выбрать'}) }}
+    {{ form.error(model, 'category_id') }}
+</div>

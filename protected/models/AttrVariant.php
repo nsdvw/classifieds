@@ -1,36 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "ad".
+ * This is the model class for table "attr_variant".
  *
- * The followings are the available columns in table 'ad':
+ * The followings are the available columns in table 'attr_variant':
  * @property string $id
+ * @property string $attr_id
  * @property string $title
- * @property string $description
- * @property string $added
- * @property string $author_id
- * @property string $city_id
- * @property string $category_id
- * @property string $visit_counter
- * @property string $status
- * @property string $importance
- * @property string $eav_set_id
  *
  * The followings are the available model relations:
- * @property User $author
- * @property City $city
- * @property Category $category
- * @property EavSet $eavSet
- * @property Photo[] $photos
+ * @property EavAttribute $attr
  */
-class Ad extends EavActiveRecord
+class AttrVariant extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'ad';
+		return 'attr_variant';
 	}
 
 	/**
@@ -41,11 +29,11 @@ class Ad extends EavActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, description, category_id', 'required'),
+			array('title', 'required'),
 			array('title', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, description, added, author_id, city_id, category_id, visit_counter, status, importance, eav_set_id', 'safe', 'on'=>'search'),
+			array('id, attr_id, title', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,11 +45,7 @@ class Ad extends EavActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'author' => array(self::BELONGS_TO, 'User', 'author_id'),
-			'city' => array(self::BELONGS_TO, 'City', 'city_id'),
-			'category' => array(self::BELONGS_TO, 'Category', 'category_id'),
-			'eavSet' => array(self::BELONGS_TO, 'EavSet', 'eav_set_id'),
-			'photos' => array(self::HAS_MANY, 'Photo', 'ad_id'),
+			'attr' => array(self::BELONGS_TO, 'EavAttribute', 'attr_id'),
 		);
 	}
 
@@ -72,16 +56,8 @@ class Ad extends EavActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'title' => 'Заголовок',
-			'description' => 'Текст объявления',
-			'added' => 'Added',
-			'author_id' => 'Author',
-			'city_id' => 'City',
-			'category_id' => 'Категория',
-			'visit_counter' => 'Visit Counter',
-			'status' => 'Status',
-			'importance' => 'Importance',
-			'eav_set_id' => 'Eav Set',
+			'attr_id' => 'Attr',
+			'title' => 'Title',
 		);
 	}
 
@@ -104,16 +80,8 @@ class Ad extends EavActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
+		$criteria->compare('attr_id',$this->attr_id,true);
 		$criteria->compare('title',$this->title,true);
-		$criteria->compare('description',$this->description,true);
-		$criteria->compare('added',$this->added,true);
-		$criteria->compare('author_id',$this->author_id,true);
-		$criteria->compare('city_id',$this->city_id,true);
-		$criteria->compare('category_id',$this->category_id,true);
-		$criteria->compare('visit_counter',$this->visit_counter,true);
-		$criteria->compare('status',$this->status,true);
-		$criteria->compare('importance',$this->importance,true);
-		$criteria->compare('eav_set_id',$this->eav_set_id,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -124,7 +92,7 @@ class Ad extends EavActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Ad the static model class
+	 * @return AttrVariant the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
