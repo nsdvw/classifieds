@@ -1,0 +1,7 @@
+{% extends 'views/layouts/main.twig' %}
+{% block title %}{{ App.name }} : регистрация{% endblock title %}
+{% block content %}
+<h1>Register</h1>
+
+{{ this.renderPartial('_form', {'model':model}) }}
+{% endblock content %}

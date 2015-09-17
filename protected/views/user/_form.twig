@@ -1,0 +1,55 @@
+<div class="form">
+
+{% set form = this.beginWidget('CActiveForm', {
+	'id':'user-form',
+	'enableAjaxValidation':true,
+	'enableClientValidation':true
+}, true) %}
+
+	<p class="note">Fields with <span class="required">*</span> are required.</p>
+
+	{{ form.errorSummary(model) }}
+
+	<div class="row">
+		{{ form.labelEx(model,'email') }}
+		{{ form.textField(model, 'email', {'size':40,'maxlength':255}) }}
+		{{ form.error(model,'email') }}
+	</div>
+
+	<div class="row">
+		{{ form.labelEx(model,'password') }}
+		{{ form.passwordField(model,'password', {'size':40,'maxlength':255}) }}
+		{{ form.error(model,'password') }}
+	</div>
+
+	<div class="row">
+		{{ form.labelEx(model,'name') }}
+		{{ form.textField(model,'name',{'size':40,'maxlength':255}) }}
+		{{ form.error(model,'name') }}
+	</div>
+
+	<div class="row">
+		{{ form.labelEx(model,'phone') }}
+		{{ form.textField(model,'phone',{'size':20,'maxlength':13}) }}
+		{{ form.error(model,'phone') }}
+	</div>
+
+	<div class="row">
+		{{ form.labelEx(model,'vk') }}
+		{{ form.textField(model,'vk',{'size':40,'maxlength':255}) }}
+		{{ form.error(model,'vk') }}
+	</div>
+
+	<div class="row">
+		{{ form.labelEx(model,'skype') }}
+		{{ form.textField(model,'skype',{'size':40,'maxlength':255}) }}
+		{{ form.error(model,'skype') }}
+	</div>
+
+	<div class="row buttons">
+		{{ C.Html.submitButton(model.isNewRecord ? 'Register' : 'Save') }}
+	</div>
+
+{{ Yii.void(this.endWidget()) }}
+
+</div><!-- form -->
