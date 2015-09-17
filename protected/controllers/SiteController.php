@@ -27,8 +27,21 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		
-		$this->render('index');
+		$criteria = new CDbCriteria;
+		$criteria->addInCondition('level', array(1,2));
+		$criteria->order = 'root, lft';
+		$categories = Category::model()->findAll($criteria);
+		$model = new SearchForm;
+
+		ECascadeDropDown::master('id_region')->setDependent(
+			'id_city',
+			array('dependentLoadingLabel'=>'Loading...'),
+			'site/citydata'
+		); 
+
+		$this->render('index',
+			array('categories'=>$categories, 'model'=>$model)
+		);
 	}
 
 	/**
@@ -104,5 +117,21 @@ class SiteController extends Controller
 	{
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
+	}
+
+	public function actionCitydata()
+	{
+		//check if isAjaxRequest and the needed GET params are set 
+		ECascadeDropDown::checkValidRequest();
+
+   		//load the cities for the current province id (=ECascadeDropDown::submittedKeyValue())
+		$data = City::model()->findAll(
+			'region_id=:region_id',
+			array(':region_id'=>ECascadeDropDown::submittedKeyValue())
+		);
+
+	   //Convert the data by using 
+	   //CHtml::listData, prepare the JSON-Response and Yii::app()->end 
+		ECascadeDropDown::renderListData($data,'city_id', 'name');
 	}
 }

@@ -5,5 +5,13 @@
 {% block content %}
 <h1>Welcome to <i>{{ App.name }}</i></h1>
 
-<p>Congratulations! You have successfully created your Yii application.</p>
+<div class="form">
+{{ C.Html.beginForm(App.createUrl('site/search'), 'get') }}
+    {{ C.Html.activeTextField(model, 'word') }}
+    {{ C.Html.activeDropDownList(model, 'region_id', model.getRegions(), {'id':'id_region', 'prompt':'-'}) }}
+    {{ C.Html.activeDropDownList(model, 'city_id',
+        model.getCities(model.region_id), {'id':'id_city', 'prompt':'-'}) }}
+{{ C.Html.endForm() }}
+</div>
+
 {% endblock content %}

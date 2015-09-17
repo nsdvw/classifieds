@@ -19,7 +19,8 @@ return array(
 		'application.components.*',
 		'application.vendor.iachilles.eavactiverecord.*',
 		'application.vendor.iachilles.eavactiverecord.datatypes.*',
-		'application.vendor.iachilles.eavactiverecord.helpers.*'
+		'application.vendor.iachilles.eavactiverecord.helpers.*',
+		'application.vendor.Joblo.cascadedropdown.ECascadeDropDown'
 	),
 
 	'modules'=>array(

@@ -11,6 +11,17 @@
               "reference":"v1.1.15"
           }
       }
+  },
+  {
+    "type": "package",
+    "package": {
+      "name":"Joblo/cascadedropdown",
+      "version":"1.0",
+      "dist": {
+        "url":"http://www.yiiframework.com/extension/cascadedropdown/files/cascadedropdown.1.0.zip",
+        "type":"zip"
+      }
+    }
   }
   ],
   "require":{
@@ -19,6 +30,7 @@
       "twig/twig": "1.*",
       "yiiext/twig-renderer":"1.1.*",
       "yiiext/nested-set-behavior": "dev-master",
-      "iachilles/eavactiverecord": "dev-master"
+      "iachilles/eavactiverecord": "dev-master",
+      "Joblo/cascadedropdown":"1.0"
   }
 }
