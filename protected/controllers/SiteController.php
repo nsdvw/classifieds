@@ -45,6 +45,22 @@ class SiteController extends Controller
 	}
 
 	/**
+	 * Action to search ads by category_id
+	 */
+	public function actionCat($id)
+	{
+
+	}
+
+	/**
+	 * Action to search ads by key word(s?)
+	 */
+	public function actionSearch($word=null,$city=null)
+	{
+
+	}
+
+	/**
 	 * This is the action to handle external exceptions.
 	 */
 	public function actionError()

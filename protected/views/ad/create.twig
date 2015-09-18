@@ -3,7 +3,9 @@
 {% block content %}
 
 <div class="form">
-{% set form = this.beginWidget('CActiveForm') %}
+{% set form = this.beginWidget('CActiveForm', {
+    'htmlOptions': {'enctype':'multipart/form-data'}
+}) %}
 {{ form.errorSummary(model) }}
 {% if hasChildren %}
     {% include 'views/ad/_subcategory.twig' %}
@@ -24,6 +26,7 @@
 {% for key in model.eavAttributes|keys %}
     {% include 'views/eav/'~key~'.twig' ignore missing %}
 {% endfor %}
+{{ C.Html.activeFileField(photo, 'image') }}
 <div class="row buttons">
     {{ C.Html.submitButton() }}
 </div>

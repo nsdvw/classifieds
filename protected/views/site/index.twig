@@ -11,9 +11,9 @@
 <div class="form">
 {{ C.Html.beginForm(App.createUrl('site/search'), 'get') }}
     {{ C.Html.activeTextField(model, 'word', {'name':'word'}) }}
-    {{ C.Html.activeDropDownList(model, 'region_id', model.getRegions(), {'id':'id_region', 'prompt':'-', 'name':'region_id'}) }}
+    {{ C.Html.activeDropDownList(model, 'region_id', model.getRegions(), {'id':'id_region', 'prompt':'-', 'name':'region'}) }}
     {{ C.Html.activeDropDownList(model, 'city_id',
-        model.getCities(model.region_id), {'id':'id_city', 'prompt':'-', 'name':'city_id'}) }}
+        model.getCities(model.region_id), {'id':'id_city', 'prompt':'-', 'name':'city'}) }}
     {{ C.Html.submitButton() }}
 {{ C.Html.endForm() }}
 </div>

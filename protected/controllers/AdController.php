@@ -111,13 +111,27 @@ class AdController extends Controller
 		}
 
 		if (isset($_POST['Ad'])) {
-			$model->attributes=$_POST['Ad'];
-			if($model->saveWithEavAttributes())
-				$this->redirect(array('view','id'=>$model->id));
+			$model->attributes = $_POST['Ad'];
+			$model->author_id = Yii::app()->user->id;
+			$model->city_id = 4400; // ???
+			$model->saveWithEavAttributes();				
 		}
-		
-		$this->render('create',array(
-			'model'=>$model, 'hasChildren'=>$hasChildren, 'lists'=>$lists
+
+		$photo = new Photo;
+		if (isset($_POST['Photo'])) {
+			$photo->image = CUploadedFile::getInstance($photo, 'image');
+			$photo->name = $photo->image->getName();
+			$photo->ad_id = $model->id;
+			if ($photo->save()) {
+				$path = Yii::getPathOfAlias('webroot').'/upload/'.
+					$photo->id.'_'.$photo->image->getName().'.txt';
+				$photo->image->saveAs($path);
+				$this->redirect(array('view','id'=>$model->id));
+			}
+		}
+
+		$this->render('create', array(
+			'model'=>$model, 'hasChildren'=>$hasChildren, 'lists'=>$lists, 'photo'=>$photo,
 		));
 	}
 
