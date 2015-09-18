@@ -1,0 +1,17 @@
+.roots {
+    border-bottom: 1px solid #ccc;
+    font-size: 1.25em;
+    font-weight: bold;
+    padding: 15px 0;
+}
+.root,
+.child {
+    float: left;
+    width: 33%;
+    padding: 6px 10px;
+    box-sizing: border-box;
+}
+.children {
+    border-bottom: 1px solid #ccc;
+    padding: 15px 0;
+}

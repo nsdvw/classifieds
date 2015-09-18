@@ -3,15 +3,45 @@
 {% block title %}{{ App.name }} : главная{% endblock title %}
 
 {% block content %}
+
+{{ Yii.void(App.clientScript.registerCssFile(App.request.baseUrl~'/css/mainpage.css')) }}
+
 <h1>Welcome to <i>{{ App.name }}</i></h1>
 
 <div class="form">
 {{ C.Html.beginForm(App.createUrl('site/search'), 'get') }}
-    {{ C.Html.activeTextField(model, 'word') }}
-    {{ C.Html.activeDropDownList(model, 'region_id', model.getRegions(), {'id':'id_region', 'prompt':'-'}) }}
+    {{ C.Html.activeTextField(model, 'word', {'name':'word'}) }}
+    {{ C.Html.activeDropDownList(model, 'region_id', model.getRegions(), {'id':'id_region', 'prompt':'-', 'name':'region_id'}) }}
     {{ C.Html.activeDropDownList(model, 'city_id',
-        model.getCities(model.region_id), {'id':'id_city', 'prompt':'-'}) }}
+        model.getCities(model.region_id), {'id':'id_city', 'prompt':'-', 'name':'city_id'}) }}
+    {{ C.Html.submitButton() }}
 {{ C.Html.endForm() }}
 </div>
+
+<div class="roots">
+    {% for category in categories %}
+        {% if category.level == 1 %}
+        <div class="root">
+            <a href="{{ App.request.baseUrl~'/site/search/'~category.id }}">{{ category.title }}</a>
+        </div>
+        {% endif %}
+    {% endfor %}
+    <div class="clear"></div>
+</div>
+
+{% for i in 1..10 %}
+    <div class="children">
+        {% for category in categories %}
+            {% if category.level != 1 and category.root == i %}
+            <div class="child">
+                <a href="{{ App.request.baseUrl~'/site/search/'~category.id }}">
+                    {{ category.title }}
+                </a>
+            </div>
+            {% endif %}
+        {% endfor %}
+        <div class="clear"></div>
+    </div>
+{% endfor %}
 
 {% endblock content %}
