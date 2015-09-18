@@ -26,7 +26,16 @@
 {% for key in model.eavAttributes|keys %}
     {% include 'views/eav/'~key~'.twig' ignore missing %}
 {% endfor %}
-{{ C.Html.activeFileField(photo, 'image') }}
+
+{{ C.Html.activeLabel(photo, 'image') }}
+{{ C.Html.activeFileField(photo, 'image', {'multiple':'multiple','name':'images[]'}) }}
+{{ C.Html.error(photo, 'image') }}
+
+{#{ this.widget('CMultiFileUpload', {
+    'name':'images',
+    'max':5
+}, true) }#}
+
 <div class="row buttons">
     {{ C.Html.submitButton() }}
 </div>

@@ -60,6 +60,7 @@ class Photo extends CActiveRecord
 			'name' => 'Имя файла',
 			'upload_time' => 'Загружен',
 			'ad_id' => 'Номер объявления',
+			'image' => 'Фото'
 		);
 	}
 

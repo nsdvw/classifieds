@@ -110,24 +110,29 @@ class AdController extends Controller
 			$lists[$key] = CHtml::listData($variants, 'title', 'title');
 		}
 
+		$photo = new Photo;
+
 		if (isset($_POST['Ad'])) {
 			$model->attributes = $_POST['Ad'];
 			$model->author_id = Yii::app()->user->id;
 			$model->city_id = 4400; // ???
-			$model->saveWithEavAttributes();				
-		}
-
-		$photo = new Photo;
-		if (isset($_POST['Photo'])) {
-			$photo->image = CUploadedFile::getInstance($photo, 'image');
-			$photo->name = $photo->image->getName();
-			$photo->ad_id = $model->id;
-			if ($photo->save()) {
-				$path = Yii::getPathOfAlias('webroot').'/upload/'.
-					$photo->id.'_'.$photo->image->getName().'.txt';
-				$photo->image->saveAs($path);
-				$this->redirect(array('view','id'=>$model->id));
-			}
+			if ($model->saveWithEavAttributes()) {
+				if (isset($_FILES['images'])) {
+					$images = CUploadedFile::getInstancesByName('images');
+					foreach ($images as $image) {
+						$photo = new Photo;
+						$photo->image = $image;
+						$photo->name = $photo->image->getName();
+						$photo->ad_id = $model->id;
+						if ($photo->save()) {
+							$path = Yii::getPathOfAlias('webroot')
+									. "/upload/{$photo->id}_{$photo->name}.txt";
+							$photo->image->saveAs($path);
+							$this->redirect(array('view','id'=>$model->id));
+						} else break;
+					}
+				}
+			}				
 		}
 
 		$this->render('create', array(
@@ -226,4 +231,11 @@ class AdController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	/*protected function getCategoryList($id)
+	{
+		$category = Category::model()->findByPk($id);
+		$children = $category->children()->findAll();
+		return CHtml::listData($children, 'id', 'title');
+	}*/
 }
