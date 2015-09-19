@@ -1,7 +1,7 @@
 .roots {
     font-size: 1.25em;
     font-weight: bold;
-    padding: 15px 0;
+    padding: 15px 0 20px;
 }
 .root,
 .child {
@@ -12,6 +12,19 @@
 }
 .children {
     border-top: 1px solid #ccc;
-    padding: 15px 0;
+    padding: 15px 0 30px;
     display: none;
+}
+.new-ad {
+    border: 1px solid black;
+    padding: 15px;
+    margin: 10px 5px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    float: left;
+    height: 120px;
+    width: 170px;
+}
+.ad-preview {
+    width: 100%;
 }

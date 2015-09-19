@@ -1,0 +1,5 @@
+<div class="new-ad">
+    <img class="ad-preview" src="{{App.request.baseUrl~'/upload/'~
+        data.photos[0].id~'_'~data.photos[0].name~'.txt'}}" alt="photo">
+    <div><a href="{{App.request.baseUrl~'/ad/view/'~data.id}}">{{data.title}}</a></div>
+</div>

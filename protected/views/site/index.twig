@@ -11,11 +11,11 @@
 
 <div class="form">
 {{ C.Html.beginForm(App.createUrl('site/search'), 'get') }}
-    {{ C.Html.activeTextField(model, 'word', {'name':'word'}) }}
+    {{ C.Html.activeTextField(model, 'word', {'name':'word', 'placeholder':'поиск по фразе'}) }}
     {{ C.Html.activeDropDownList(model, 'region_id', model.getRegions(),
-        {'id':'id_region', 'prompt':'-', 'name':'region'}) }}
+        {'id':'id_region', 'prompt':'область', 'name':'region'}) }}
     {{ C.Html.activeDropDownList(model, 'city_id',
-        model.getCities(model.region_id), {'id':'id_city', 'prompt':'-', 'name':'city'}) }}
+        model.getCities(model.region_id), {'id':'id_city', 'prompt':'город', 'name':'city'}) }}
     {{ C.Html.submitButton('', {'name':'', 'value':'Найти'}) }}
 {{ C.Html.endForm() }}
 </div>
@@ -47,6 +47,16 @@
     <div class="clear"></div>
 </div>
 {% endfor %}
+
+<h2>Новые объявления</h2>
+<div class="clistview">
+{{ this.widget('zii.widgets.CListView', {
+    'dataProvider':dataProvider,
+    'itemView':'_new',
+    'summaryText':false
+}, true) }}
+<div class="clear"></div>
+</div>
 
 <script>
     $(".roots").click(function(event){

@@ -32,6 +32,15 @@ class SiteController extends Controller
 		$criteria->order = 'root, lft';
 		$categories = Category::model()->findAll($criteria);
 		$model = new SearchForm;
+		$dp = new CActiveDataProvider('Ad', array(
+			'criteria'=>array(
+				'condition'=>'status="unpublished"',
+				'order'=>'added DESC',
+				'with'=>array('author', 'category', 'city', 'photos'),
+				'limit'=>20,
+			),
+			'pagination'=>false
+		));
 
 		ECascadeDropDown::master('id_region')->setDependent(
 			'id_city',
@@ -40,7 +49,7 @@ class SiteController extends Controller
 		); 
 
 		$this->render('index',
-			array('categories'=>$categories, 'model'=>$model)
+			array('categories'=>$categories, 'model'=>$model, 'dataProvider'=>$dp)
 		);
 	}
 
