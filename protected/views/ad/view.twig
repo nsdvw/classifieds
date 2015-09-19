@@ -1,0 +1,21 @@
+{% extends 'views/layouts/main.twig' %}
+
+{% block content %}
+    {{ Yii.void(App.clientScript.registerCssFile(App.request.baseUrl~'/css/adview.css')) }}
+    <h3>{{ model.title }}</h3>
+    <div class="ad-author-and-city">
+        <div class="ad-author">Автор: {{ model.author.name }}</div>
+        <div class="ad-city">Город: {{ model.city.name }}</div>
+        <div class="clear"></div>
+    </div>
+    <div class="ad-description">Содержимое: {{ model.description }}</div>
+    <div class="ad-added">Добавлено: {{ model.added }}</div>
+    <div class="ad-images">
+        {% for photo in model.photos %}
+        <div class="ad-image">
+            <img src="/upload/{{photo.id}}_{{photo.name}}.txt" height="200">
+        </div>
+        {% endfor %}
+        <div class="clear"></div>
+    </div>
+{% endblock content %}

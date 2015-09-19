@@ -59,7 +59,6 @@ class AdController extends Controller
 		$criteria = new CDbCriteria;
 		$criteria->condition = 'level=:level';
 		$criteria->params = array('level'=>1);
-		//$dp = new CActiveDataProvider('Category', array('criteria'=>$criteria));
 		$models = Category::model()->findAll($criteria);
 		$this->render('new', array('models'=>$models));
 	}
@@ -93,43 +92,34 @@ class AdController extends Controller
 	public function actionCreate($id)
 	{
 		$model = new Ad;
-		$category = Category::model()->findByPk($id);
-		$children = $category->children()->findAll();
-		$children = CHtml::listData($children, 'id', 'title');
-		$hasChildren = ($children) ? true : false; 
-		$model->attachEavSet($category->set_id);
+		$childCategories = $this->getCategoryList($id);
+		$lists = array('category' => $childCategories);
+		$hasChildren = ($childCategories) ? true : false; 
+		$model->attachEavSet(Category::model()->findByPk($id)->set_id);
 		$model->category_id = $id;
 
-		$lists = array('category' => $children);
-		foreach ($model->eavAttributes as $key => $value) {
-			$attribute = EavAttribute::model()->findByAttributes(array('name'=>$key));
-			$variants =	AttrVariant::model()->findAllByAttributes(
-				array('attr_id'=>$attribute->id)
-			);
-			if (!$variants) continue;
-			$lists[$key] = CHtml::listData($variants, 'title', 'title');
-		}
+		$attrVariants = $this->getAttrVariantLists($model->eavAttributes);
+		$lists = array_merge($lists, $attrVariants);
 
 		$photo = new Photo;
 
 		if (isset($_POST['Ad'])) {
 			$model->attributes = $_POST['Ad'];
 			$model->author_id = Yii::app()->user->id;
-			$model->city_id = 4400; // ???
+			$model->city_id = 4400; // ??? в куках его сохранить что ли
 			if ($model->saveWithEavAttributes()) {
 				if (isset($_FILES['images'])) {
 					$images = CUploadedFile::getInstancesByName('images');
-					foreach ($images as $image) {
-						$photo = new Photo;
-						$photo->image = $image;
-						$photo->name = $photo->image->getName();
-						$photo->ad_id = $model->id;
-						if ($photo->save()) {
-							$path = Yii::getPathOfAlias('webroot')
-									. "/upload/{$photo->id}_{$photo->name}.txt";
-							$photo->image->saveAs($path);
-							$this->redirect(array('view','id'=>$model->id));
-						} else break;
+					$photos = $this->getValidPhotos($images, $model->id);
+					if ($photos) {
+						foreach ($photos as $photo) {
+							if ($photo->save()) {
+								$path = Yii::getPathOfAlias('webroot')
+										. "/upload/{$photo->id}_{$photo->name}.txt";
+								$photo->image->saveAs($path);
+							}
+						}
+						$this->redirect(array('view','id'=>$model->id));
 					}
 				}
 			}				
@@ -140,12 +130,14 @@ class AdController extends Controller
 		));
 	}
 
+
+
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate($id)
+	/*public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
 
@@ -162,37 +154,37 @@ class AdController extends Controller
 		$this->render('update',array(
 			'model'=>$model,
 		));
-	}
+	}*/
 
 	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	public function actionDelete($id)
+	/*public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-	}
+	}*/
 
 	/**
 	 * Lists all models.
 	 */
-	public function actionIndex()
+	/*public function actionIndex()
 	{
 		$dataProvider=new CActiveDataProvider('Ad');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
-	}
+	}*/
 
 	/**
 	 * Manages all models.
 	 */
-	public function actionAdmin()
+	/*public function actionAdmin()
 	{
 		$model=new Ad('search');
 		$model->unsetAttributes();  // clear any default values
@@ -202,7 +194,7 @@ class AdController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 		));
-	}
+	}*/
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
@@ -213,7 +205,9 @@ class AdController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Ad::model()->findByPk($id);
+		$model = Ad::model()->withEavAttributes()->with(
+				'author', 'category', 'city', 'photos'
+			)->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -232,10 +226,37 @@ class AdController extends Controller
 		}
 	}
 
-	/*protected function getCategoryList($id)
+	protected function getCategoryList($id)
 	{
 		$category = Category::model()->findByPk($id);
 		$children = $category->children()->findAll();
 		return CHtml::listData($children, 'id', 'title');
-	}*/
+	}
+
+	protected function getAttrVariantLists(array $eavAttributes)
+	{
+		$lists = array();
+		foreach ($eavAttributes as $key => $value) {
+			$attribute = EavAttribute::model()->findByAttributes(array('name'=>$key));
+			$variants =	AttrVariant::model()->findAllByAttributes(
+				array('attr_id'=>$attribute->id)
+			);
+			if (!$variants) continue;
+			$lists[$key] = CHtml::listData($variants, 'title', 'title');
+		}
+		return $lists;
+	}
+
+	protected function getValidPhotos(array $images, $model_id)
+	{
+		foreach ($images as $image) {
+			$photo = new Photo;
+			$photo->image = $image;
+			$photo->name = $photo->image->getName();
+			$photo->ad_id = $model_id;
+			$photos[] = $photo;
+			if (!$photo->validate()) return false;
+		}
+		return $photos;
+	}
 }

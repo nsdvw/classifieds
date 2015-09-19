@@ -1,5 +1,4 @@
 .roots {
-    border-bottom: 1px solid #ccc;
     font-size: 1.25em;
     font-weight: bold;
     padding: 15px 0;
@@ -12,6 +11,7 @@
     box-sizing: border-box;
 }
 .children {
-    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
     padding: 15px 0;
+    display: none;
 }

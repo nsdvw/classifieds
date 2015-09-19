@@ -27,8 +27,8 @@
 </table>
 <script>
 $(".first-level").on("click", function(event){
-    event.preventDefault();
     if (!$(event.target).hasClass('category-link')) return;
+    event.preventDefault();
     var id = $(event.target).attr('data-id');
     $.ajax('/ad/getcategories', {
         data:'id='+id,
@@ -52,8 +52,8 @@ $(".first-level").on("click", function(event){
     });
 });
 $(".second-level").on("click", function(event){
-    event.preventDefault();
     if (!$(event.target).hasClass('category-link')) return;
+    event.preventDefault();
     var id = $(event.target).attr('data-id');
     $.ajax('/ad/getcategories', {
         data:'id='+id,

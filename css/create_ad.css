@@ -6,6 +6,7 @@
 .third-level {
     vertical-align: top;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     width: 33%;
     padding: 0px 15px;
 }

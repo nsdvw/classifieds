@@ -1,0 +1,10 @@
+.ad-author, .ad-city {
+    font-style: italic;
+    font-weight: bold;
+    float: left;
+    margin-right: 30px;
+}
+.ad-image {
+    float: left;
+    padding: 10px;
+}
