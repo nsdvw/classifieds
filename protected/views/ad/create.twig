@@ -24,7 +24,11 @@
 </div>
 {#{ this.widget('EavForm', {'model': model}, true) }#}
 {% for key in model.eavAttributes|keys %}
-    {% include 'views/eav/'~key~'.twig' ignore missing %}
+    {% if lists[key] %} 
+        {% include 'views/eav/dropDown.twig' ignore missing %}
+    {% else %}
+        {% include 'views/eav/textInput.twig' ignore missing %}
+    {% endif %}
 {% endfor %}
 
 {{ C.Html.activeLabel(photo, 'image') }}
