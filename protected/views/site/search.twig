@@ -1,0 +1,20 @@
+{% extends 'views/layouts/main.twig' %}
+
+{% block title %}{{ App.name }} : поиск{% endblock title %}
+
+{% block content %}
+{# <div class="clistview">
+    {% for model in models %}
+        {% include 'views/site/_search_item.twig' %}
+    {% endfor %}
+    <div class="clear"></div>
+</div>
+{{ this.widget('CLinkPager', {
+    'pages': pages
+}, true) }} #}
+{{ Yii.void(App.clientScript.registerCssFile(App.request.baseUrl~'/css/search.css')) }}
+{{ this.widget('zii.widgets.CListView', {
+    'dataProvider':dataProvider,
+    'itemView':'_search_item'
+}, true) }}
+{% endblock content %}

@@ -118,6 +118,7 @@ class Photo extends CActiveRecord
 			$this->putWatermark($path);
 			$this->createThumb($name, 170/120);
 			$this->createThumb($name, 4/3, self::BG_THUMB_SIZE, self::BG_THUMB_PREFIX);
+			$this->createThumb($name, 4/3, self::TN_THUMB_SIZE, self::TN_THUMB_PREFIX);
 		}
 		parent::afterSave();
 	}

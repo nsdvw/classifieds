@@ -54,19 +54,39 @@ class SiteController extends Controller
 	}
 
 	/**
-	 * Action to search ads by category_id
-	 */
-	public function actionCat($id)
-	{
-
-	}
-
-	/**
 	 * Action to search ads by key word(s?)
 	 */
-	public function actionSearch($word=null,$city=null)
+	public function actionSearch($id=null,$word=null,$city=null,$page=null)
 	{
+		$pageSize = 1;
+		$condition = "status='unpublished'";
+		if (!$page) {
+			$page = 1;
+		} else {
+			$page = intval($page);
+		}
 
+		$criteria = new CDbCriteria;
+		$criteria->condition = $condition;
+		$criteria->offset = $pageSize * ($page - 1);
+		$criteria->limit = $pageSize;
+		$criteria->order = 'added DESC';
+		$count = Ad::model()->count($criteria);
+		$pages = new CPagination($count);
+		$pages->pageSize = $pageSize;
+		$pages->applyLimit($criteria);
+		$models = Ad::model()->withEavAttributes()->with(
+			'author', 'category', 'city', 'photos'
+			)->findAll($criteria);
+		$dp = new CActiveDataProvider('Ad', array(
+			'data'=>$models,
+			'countCriteria'=>array(
+		        'condition'=>$condition,
+		    ),
+		    'pagination'=>$pages,
+			));
+
+		$this->render('search', array('dataProvider'=>$dp));
 	}
 
 	/**

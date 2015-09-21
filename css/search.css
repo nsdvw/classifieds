@@ -1,0 +1,40 @@
+.ad-item {
+    height: 120px;
+}
+.ad-preview {
+    background: rgb(242,242,242);
+    text-align: center;
+    line-height: 120px;
+    display: inline-block;
+}
+.thumb-small {
+    vertical-align: middle;
+}
+.image-container {
+    width: 170px;
+    float: left;
+}
+.ad-description {
+    margin: 0 185px;
+    height: 100%;
+    overflow: hidden;
+}
+.ad-title {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+.price-container {
+    width: 170px;
+    float: right;
+    height: 100%;
+}
+.ad-city {
+    margin: 60px 0 10px;
+    font-weight: bold;
+}
+.price-container {
+    box-sizing: border-box;
+    font-size: 1.6em;
+    font-weight: bold;
+    padding: 8px;
+}

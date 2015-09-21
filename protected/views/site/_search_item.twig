@@ -1,0 +1,28 @@
+<div class="ad-item">
+    <div class="price-container">
+        {{ data.price }}
+    </div>
+
+    <div class="image-container">
+    <a class="ad-preview" href="{{App.request.baseUrl~'/ad/view/'~data.id}}">
+        <img class="thumb-small" src="{{App.request.baseUrl~'/images/thumb/'~
+        'small_'~data.photos[0].id~'_'~data.photos[0].name}}" alt="photo">
+    </a>
+    </div>
+
+    <div class="ad-description">
+        <div class="ad-title">
+            <a href="{{App.request.baseUrl~'/ad/view/'~data.id}}">
+                {{data.title}}
+            </a>
+        </div>
+        <div class="ad-city">
+            {{ data.city.name }}
+        </div>
+        <div class="ad-added">
+            {{ data.added|date('d-m-Y','Europe/Kiev') }}
+        </div>
+    </div>
+    
+    <div class="clear"></div>
+</div>

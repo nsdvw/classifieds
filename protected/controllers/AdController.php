@@ -118,7 +118,7 @@ class AdController extends Controller
 						$this->redirect(array('view','id'=>$model->id));
 					}
 				}
-			}				
+			}			
 		}
 
 		$this->render('create', array(

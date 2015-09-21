@@ -33,6 +33,17 @@ class Ad extends EavActiveRecord
 		return 'ad';
 	}
 
+	public function __call($name, array $params = null)
+    {
+        return '';
+    }
+
+/*	protected $price;
+	public function getPrice()
+	{
+		return $this->price;
+	}*/
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */
