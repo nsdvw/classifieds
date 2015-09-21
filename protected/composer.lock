@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a17ca4456b968799d2577bc9593e9b1a",
+    "hash": "cfd82a5a1fb4473af3a7fd59707aa21b",
     "packages": [
         {
             "name": "Joblo/cascadedropdown",
@@ -55,6 +55,35 @@
                 "yii"
             ],
             "time": "2014-11-19 11:27:20"
+        },
+        {
+            "name": "smottt/wideimage",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/smottt/WideImage.git",
+                "reference": "669f63f1452c7fc70120fff4bc457727714a0834"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/smottt/WideImage/zipball/669f63f1452c7fc70120fff4bc457727714a0834",
+                "reference": "669f63f1452c7fc70120fff4bc457727714a0834",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "WideImage": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0",
+                "LGPL-2.1"
+            ],
+            "description": "An open-source PHP library for image manipulation. (With namespaces, PHP 5.3+)",
+            "homepage": "http://wideimage.sourceforge.net",
+            "time": "2015-05-27 09:42:22"
         },
         {
             "name": "twig/twig",
@@ -266,7 +295,8 @@
     "stability-flags": {
         "yiisoft/yii": 20,
         "yiiext/nested-set-behavior": 20,
-        "iachilles/eavactiverecord": 20
+        "iachilles/eavactiverecord": 20,
+        "smottt/wideimage": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

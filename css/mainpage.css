@@ -16,15 +16,24 @@
     display: none;
 }
 .new-ad {
-    border: 1px solid black;
-    padding: 15px;
+    border: 1px solid #ccc;
     margin: 10px 5px;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     float: left;
-    height: 120px;
-    width: 170px;
+    height: 144px;
+    width: 172px;
 }
 .ad-preview {
-    width: 100%;
+    height: 120px;
+    background: rgb(242,242,242);
+    text-align: center;
+    line-height: 120px;
+    display: block;
+}
+.thumb-title {
+    padding: 3px;
+}
+.thumb-small {
+    vertical-align: middle;
 }

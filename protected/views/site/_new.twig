@@ -1,5 +1,15 @@
 <div class="new-ad">
-    <img class="ad-preview" src="{{App.request.baseUrl~'/upload/'~
-        data.photos[0].id~'_'~data.photos[0].name~'.txt'}}" alt="photo">
-    <div><a href="{{App.request.baseUrl~'/ad/view/'~data.id}}">{{data.title}}</a></div>
+    <a class="ad-preview" href="{{App.request.baseUrl~'/ad/view/'~data.id}}">
+        <img class="thumb-small" src="{{App.request.baseUrl~'/images/thumb/'~
+        'small_'~data.photos[0].id~'_'~data.photos[0].name}}" alt="photo">
+    </a>
+    <div class="thumb-title">
+        <a href="{{App.request.baseUrl~'/ad/view/'~data.id}}">
+            {% if data.title|length > 25 %}
+                {{data.title|slice(0,22)~'...'}}
+            {% else %}
+                {{data.title}}
+            {% endif %}
+        </a>
+    </div>
 </div>

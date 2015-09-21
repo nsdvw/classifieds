@@ -14,6 +14,12 @@
  */
 class Photo extends CActiveRecord
 {
+	const SM_THUMB_SIZE = 170;
+	const SM_THUMB_PREFIX = 'small';
+	const BG_THUMB_SIZE = 800;
+	const BG_THUMB_PREFIX = 'big';
+	const TN_THUMB_SIZE = 50;
+	const TN_THUMB_PREFIX = 'tiny';
 	public $image;
 	/**
 	 * @return string the associated database table name
@@ -101,5 +107,67 @@ class Photo extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public function afterSave()
+	{
+		if ($this->isNewRecord) {
+			$name = "{$this->id}_{$this->name}";
+			$path = Yii::getPathOfAlias('webroot').'/upload/'.$name;
+			$this->image->saveAs($path);
+			$this->putWatermark($path);
+			$this->createThumb($name, 170/120);
+			$this->createThumb($name, 4/3, self::BG_THUMB_SIZE, self::BG_THUMB_PREFIX);
+		}
+		parent::afterSave();
+	}
+
+	public function afterConstruct()
+	{
+		Yii::setPathOfAlias('WideImage',Yii::getPathOfAlias(
+			'application.vendor.smottt.wideimage.lib.WideImage'
+		));
+	}
+
+	protected function putWatermark(
+		$pathToPhoto,
+		$coef = 4)
+	{
+		$pathToLogo = Yii::getPathOfAlias('webroot').'/images/logo.png';
+		$img = WideImage\WideImage::loadFromFile($pathToPhoto);
+		$watermark = WideImage\WideImage::loadFromFile($pathToLogo);
+		if ($img->getWidth() > $img->getHeight()) {
+		    $ratio = $img->getHeight() / $watermark->getHeight();
+		    $multiplier = intval(($ratio / $coef) * 100) . '%';
+		    $watermark = $watermark->resize(null, $multiplier);
+		    $margin = intval($img->getHeight() / 20);
+		    $new_img = $img->merge($watermark, "right - $margin", "bottom - $margin");
+		} else {
+		    $ratio = $img->getWidth() / $watermark->getWidth();
+		    $multiplier = intval(($ratio / $coef) * 100) . '%';
+		    $watermark = $watermark->resize($multiplier, null);
+		    $margin = intval($img->getHeight() / 20);
+		    $new_img = $img->merge($watermark, "right - $margin", "bottom - $margin");
+		}
+		$new_img->saveToFile($pathToPhoto);
+	}
+
+	protected function createThumb(
+		$name,
+		$ratio = 1.33,
+		$size = self::SM_THUMB_SIZE,
+		$label = self::SM_THUMB_PREFIX,
+		$uploadDir = null,
+		$thumbDir = null)
+	{
+		if (!$uploadDir) $uploadDir = Yii::getPathOfAlias('webroot').'/upload/';
+		if (!$thumbDir) $thumbDir = Yii::getPathOfAlias('webroot').'/images/thumb/';
+		$img = WideImage\WideImage::loadFromFile($uploadDir . $name);
+		if ($img->getWidth() > $ratio * $img->getHeight()) {
+		    $new_img = $img->resizeDown(intval($size), null);
+		} else {
+		    $new_img = $img->resizeDown(null, intval($size/$ratio));
+		}
+		$new_img->saveToFile($thumbDir . $label . '_' . $name);
 	}
 }

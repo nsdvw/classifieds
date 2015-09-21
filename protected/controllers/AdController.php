@@ -113,11 +113,7 @@ class AdController extends Controller
 					$photos = $this->getValidPhotos($images, $model->id);
 					if ($photos) {
 						foreach ($photos as $photo) {
-							if ($photo->save()) {
-								$path = Yii::getPathOfAlias('webroot')
-										. "/upload/{$photo->id}_{$photo->name}.txt";
-								$photo->image->saveAs($path);
-							}
+							$photo->save();
 						}
 						$this->redirect(array('view','id'=>$model->id));
 					}
