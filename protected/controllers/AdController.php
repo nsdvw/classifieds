@@ -92,14 +92,14 @@ class AdController extends Controller
 	public function actionCreate($id)
 	{
 		$model = new Ad;
-		$childCategories = $this->getCategoryList($id);
-		$lists = array('category' => $childCategories);
+		$childCategories = Category::getChildren($id);
+		$dropDownLists = array('category' => $childCategories);
 		$hasChildren = ($childCategories) ? true : false; 
 		$model->attachEavSet(Category::model()->findByPk($id)->set_id);
 		$model->category_id = $id;
 
-		$attrVariants = $this->getAttrVariantLists($model->eavAttributes);
-		$lists = array_merge($lists, $attrVariants);
+		$attrVariants = AttrVariant::getVariants($model->eavAttributes);
+		$dropDownLists = array_merge($dropDownLists, $attrVariants);
 
 		$photo = new Photo;
 
@@ -122,7 +122,10 @@ class AdController extends Controller
 		}
 
 		$this->render('create', array(
-			'model'=>$model, 'hasChildren'=>$hasChildren, 'lists'=>$lists, 'photo'=>$photo,
+			'model'=>$model,
+			'hasChildren'=>$hasChildren,
+			'dropDownLists'=>$dropDownLists,
+			'photo'=>$photo,
 		));
 	}
 
@@ -220,27 +223,6 @@ class AdController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
-	}
-
-	protected function getCategoryList($id)
-	{
-		$category = Category::model()->findByPk($id);
-		$children = $category->children()->findAll();
-		return CHtml::listData($children, 'id', 'title');
-	}
-
-	protected function getAttrVariantLists(array $eavAttributes)
-	{
-		$lists = array();
-		foreach ($eavAttributes as $key => $value) {
-			$attribute = EavAttribute::model()->findByAttributes(array('name'=>$key));
-			$variants =	AttrVariant::model()->findAllByAttributes(
-				array('attr_id'=>$attribute->id)
-			);
-			if (!$variants) continue;
-			$lists[$key] = CHtml::listData($variants, 'title', 'title');
-		}
-		return $lists;
 	}
 
 	protected function getValidPhotos(array $images, $model_id)

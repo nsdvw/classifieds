@@ -98,4 +98,18 @@ class AttrVariant extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public static function getVariants(array $eavAttributes)
+	{
+		$variants = array();
+		foreach ($eavAttributes as $key => $value) {
+			$attribute = EavAttribute::model()->findByAttributes(array('name'=>$key));
+			$list =	self::model()->findAllByAttributes(
+				array('attr_id'=>$attribute->id)
+			);
+			if (!$list) continue;
+			$variants[$key] = CHtml::listData($list, 'title', 'title');
+		}
+		return $variants;
+	}
 }

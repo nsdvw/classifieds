@@ -125,4 +125,11 @@ class Category extends CActiveRecord
 			),
 		);
 	}
+
+	public static function getChildren($id)
+	{
+		$category = self::model()->findByPk($id);
+		$children = $category->children()->findAll();
+		return CHtml::listData($children, 'id', 'title');
+	}
 }
