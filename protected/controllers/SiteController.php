@@ -86,7 +86,32 @@ class SiteController extends Controller
 		    'pagination'=>$pages,
 			));
 
-		$this->render('search', array('dataProvider'=>$dp));
+		//$attributes = array();
+		$form = new ExtSearchForm;
+		$dropDownLists = array(); // list of key=>value for dropDownLists
+		$dummy = new Ad;
+		if ($id) {
+			$dummy->attachEavSet(Category::model()->findByPk($id)->set_id);
+			$form->setEav($dummy->eavAttributes);
+			if (isset($_GET['search'])) {
+				foreach ($_GET['search'] as $key=>$value) {
+					$form->eav[$key] = $value;
+				}
+			}
+			$childCategories = Category::getChildren($id);
+			$dropDownLists = array('category' => $childCategories);
+			$attrVariants = AttrVariant::getVariants($dummy->eavAttributes);
+			$dropDownLists = array_merge($dropDownLists, $attrVariants);
+		}
+
+		//var_dump($attributes); Yii::app()->end();
+
+		$this->render(
+			'search',
+			array(
+				'dataProvider'=>$dp,
+				'form'=>$form,
+				'dropDownLists'=>$dropDownLists));
 	}
 
 	/**

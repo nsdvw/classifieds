@@ -1,0 +1,7 @@
+<div class="row">
+    {{ C.Html.label(attribute, false) }}
+    {{ C.Html.dropDownList(
+        'search['~attribute~']', 'empty',
+        dropDownLists[attribute], {'empty':'выбрать'})
+    }}
+</div>

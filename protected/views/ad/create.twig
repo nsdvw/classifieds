@@ -19,12 +19,12 @@
 </div>
 <div class="row">
     {{ form.labelEx(model, 'description') }}
-    {{ form.textField(model, 'description') }}
+    {{ form.textArea(model, 'description') }}
     {{ form.error(model, 'description') }}
 </div>
 {#{ this.widget('EavForm', {'model': model}, true) }#}
 {% for key in model.eavAttributes|keys %}
-    {% if lists[key] %} 
+    {% if dropDownLists[key] %} 
         {% include 'views/eav/dropDown.twig' ignore missing %}
     {% else %}
         {% include 'views/eav/textInput.twig' ignore missing %}
