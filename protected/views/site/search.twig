@@ -7,15 +7,33 @@
 {{ Yii.void(App.clientScript.registerCssFile(App.request.baseUrl~'/css/search.css')) }}
 <div class="form">
 {{ C.Html.beginForm(App.createUrl('site/search/'~App.request.getQuery('id')), 'get') }}
+    <div class="row">
+    {{ C.Html.textField('word', form.word, {'placeholder':'поиск по фразе'}) }}
+    {{ C.Html.dropDownList(
+        'region_id',
+        form.region_id ? form.region_id : 'empty',
+        form.getRegions(),
+        {'empty':'выбрать', 'id':'id_region'})
+    }}
+    {{ C.Html.dropDownList(
+        'city_id',
+        form.city_id ? form.city_id : 'empty',
+        form.getCities(form.region_id),
+        {'empty':'выбрать', 'id':'id_city'})
+    }}
+    </div>
     {% for attribute, value in form.eav %}
-        {% if dropDownLists[attribute] %}
-            {% include 'views/eav/dropDownSearch.twig' %}
-        {% else %}
-            {% include 'views/eav/doubleTextInput.twig' %}
-        {% endif %}
+        <div class="eav-wrapper">
+            {% if dropDownLists[attribute] %}
+                {% include 'views/eav/dropDownSearch.twig' %}
+            {% else %}
+                {% include 'views/eav/doubleTextInput.twig' %}
+            {% endif %}
+        </div>
     {% endfor %}
-    <input type="submit">
-{{ C.Html.endForm() }}
+    <div><input type="submit"></div>
+    <div class="clear"></div>
+    {{ C.Html.endForm() }}
 </div>
 
 {{ this.widget('zii.widgets.CListView', {

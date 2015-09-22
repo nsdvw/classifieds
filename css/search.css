@@ -38,3 +38,7 @@
     font-weight: bold;
     padding: 8px;
 }
+.eav-wrapper {
+    width: 160px;
+    float: left;
+}

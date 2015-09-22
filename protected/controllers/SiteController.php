@@ -98,13 +98,19 @@ class SiteController extends Controller
 					$form->eav[$key] = $value;
 				}
 			}
+			$form->region_id = Yii::app()->request->getQuery('region_id');
+			$form->city_id = Yii::app()->request->getQuery('city_id');
+			$form->word = Yii::app()->request->getQuery('word');
 			$childCategories = Category::getChildren($id);
 			$dropDownLists = array('category' => $childCategories);
 			$attrVariants = AttrVariant::getVariants($dummy->eavAttributes);
 			$dropDownLists = array_merge($dropDownLists, $attrVariants);
 		}
 
-		//var_dump($attributes); Yii::app()->end();
+		ECascadeDropDown::master('id_region')->setDependent(
+			'id_city',
+			array('dependentLoadingLabel'=>'Loading cities ...'),
+			'site/citydata');  
 
 		$this->render(
 			'search',
