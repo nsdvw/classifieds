@@ -129,7 +129,19 @@ class Category extends CActiveRecord
 	public static function getChildren($id)
 	{
 		$category = self::model()->findByPk($id);
+		if (!$category) return false;
 		$children = $category->children()->findAll();
 		return CHtml::listData($children, 'id', 'title');
+	}
+
+	public static function getChildrenIds($id)
+	{
+		$category = self::model()->findByPk($id);
+		if (!$category) return false;
+		$children = $category->descendants()->findAll();
+		foreach ($children as $child) {
+			$ids[] = $child->id;
+		}
+		return $ids;
 	}
 }

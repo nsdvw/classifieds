@@ -56,11 +56,6 @@ class SiteController extends Controller
 	{
 		$pageSize = 1;
 		$condition = "status='unpublished'";
-		/*if (!$page) {
-			$page = 1;
-		} else {
-			$page = intval($page);
-		}*/
 
 		$commonCriteria = new CDbCriteria;
 		$pagerCriteria = new CDbCriteria;
@@ -71,6 +66,11 @@ class SiteController extends Controller
 		$dropDownLists = array(); // list of key=>value for dropDownLists
 		$dummy = new Ad; // need only to get eavAttributes by category id
 		if ($id) {
+			$childrenIds = Category::getChildrenIds($id);
+			if ($childrenIds) {
+				$commonCriteria->addInCondition('category_id', $childrenIds);
+				$pagerCriteria->addInCondition('category_id', $childrenIds);
+			}
 			$dummy->attachEavSet(Category::model()->findByPk($id)->set_id);
 			$form->setEav($dummy->eavAttributes);
 			if (isset($_GET['search'])) {
@@ -81,9 +81,6 @@ class SiteController extends Controller
 				}
 				$this->buildCriteria($commonCriteria);
 				$this->buildCriteria($pagerCriteria);
-
-				/*var_dump($commonCriteria->condition, $commonCriteria->params);
-				Yii::app()->end();*/
 			}
 			$form->region_id = Yii::app()->request->getQuery('region_id');
 			$form->city_id = Yii::app()->request->getQuery('city_id');
