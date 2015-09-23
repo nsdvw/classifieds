@@ -42,11 +42,7 @@ class SiteController extends Controller
 			'pagination'=>false
 		));
 
-		ECascadeDropDown::master('id_region')->setDependent(
-			'id_city',
-			array('dependentLoadingLabel'=>'Loading...'),
-			'site/citydata'
-		); 
+		$this->setDependentCascadeDropDown();
 
 		$this->render('index',
 			array('categories'=>$categories, 'model'=>$model, 'dataProvider'=>$dp)
@@ -60,43 +56,34 @@ class SiteController extends Controller
 	{
 		$pageSize = 1;
 		$condition = "status='unpublished'";
-		if (!$page) {
+		/*if (!$page) {
 			$page = 1;
 		} else {
 			$page = intval($page);
-		}
+		}*/
 
-		$criteria = new CDbCriteria;
-		$criteria->condition = $condition;
-		$criteria->offset = $pageSize * ($page - 1);
-		$criteria->limit = $pageSize;
-		$criteria->order = 'added DESC';
-		$count = Ad::model()->count($criteria);
-		$pages = new CPagination($count);
-		$pages->pageSize = $pageSize;
-		$pages->applyLimit($criteria);
-		$models = Ad::model()->withEavAttributes()->with(
-			'author', 'category', 'city', 'photos'
-			)->findAll($criteria);
-		$dp = new CActiveDataProvider('Ad', array(
-			'data'=>$models,
-			'countCriteria'=>array(
-		        'condition'=>$condition,
-		    ),
-		    'pagination'=>$pages,
-			));
+		$commonCriteria = new CDbCriteria;
+		$pagerCriteria = new CDbCriteria;
+		$commonCriteria->condition = $pagerCriteria->condition = $condition;
+		$pagerCriteria->order = 'added DESC';
 
-		//$attributes = array();
 		$form = new ExtSearchForm;
 		$dropDownLists = array(); // list of key=>value for dropDownLists
-		$dummy = new Ad;
+		$dummy = new Ad; // need only to get eavAttributes by category id
 		if ($id) {
 			$dummy->attachEavSet(Category::model()->findByPk($id)->set_id);
 			$form->setEav($dummy->eavAttributes);
 			if (isset($_GET['search'])) {
+				$attributes = $this->getEavAttributes();
 				foreach ($_GET['search'] as $key=>$value) {
+					if (!in_array($key, $attributes)) continue;
 					$form->eav[$key] = $value;
 				}
+				$this->buildCriteria($commonCriteria);
+				$this->buildCriteria($pagerCriteria);
+
+				/*var_dump($commonCriteria->condition, $commonCriteria->params);
+				Yii::app()->end();*/
 			}
 			$form->region_id = Yii::app()->request->getQuery('region_id');
 			$form->city_id = Yii::app()->request->getQuery('city_id');
@@ -107,10 +94,22 @@ class SiteController extends Controller
 			$dropDownLists = array_merge($dropDownLists, $attrVariants);
 		}
 
-		ECascadeDropDown::master('id_region')->setDependent(
-			'id_city',
-			array('dependentLoadingLabel'=>'Loading cities ...'),
-			'site/citydata');  
+		$totalCount = Ad::model()->withEavAttributes()->count($commonCriteria);
+		$pages = new CPagination($totalCount);
+		$pages->pageSize = $pageSize;
+		$pages->applyLimit($pagerCriteria);
+		$models = Ad::model()->withEavAttributes()->with(
+			'author', 'category', 'city', 'photos'
+			)->findAll($pagerCriteria);
+		//var_dump($pagerCriteria->condition, $commonCriteria->condition); Yii::app()->end();
+		$dp = new CActiveDataProvider('Ad', array(
+			'data'=>$models,
+			//'countCriteria'=>$commonCriteria,
+		    'pagination'=>$pages,
+			));
+		$dp->setTotalItemCount($totalCount);
+
+		$this->setDependentCascadeDropDown();
 
 		$this->render(
 			'search',
@@ -209,5 +208,47 @@ class SiteController extends Controller
 	   //Convert the data by using 
 	   //CHtml::listData, prepare the JSON-Response and Yii::app()->end 
 		ECascadeDropDown::renderListData($data,'city_id', 'name');
+	}
+
+	protected function setDependentCascadeDropDown(
+		$id_region = 'id_region',
+		$id_city = 'id_city',
+		$action = 'site/citydata')
+	{
+		ECascadeDropDown::master($id_region)->setDependent(
+			$id_city,
+			array('dependentLoadingLabel'=>'Loading cities ...'),
+			$action);
+	}
+
+	protected function buildCriteria(CDbCriteria $criteria, $getParam = 'search')
+	{
+		$attributes = $this->getEavAttributes();
+		foreach ($_GET[$getParam] as $key=>$value) {
+			if (!in_array($key, $attributes)) continue;
+			if (is_array($value)) {
+				if (isset($value['min']) and !empty($value['min'])) {
+					$criteria->addCondition("::{$key} >= :min_{$key}");
+					$criteria->params[":min_{$key}"] = $value['min'];
+				}
+				if (isset($value['max']) and !empty($value['max'])) {
+					$criteria->addCondition("::{$key} <= :max_{$key}");
+					$criteria->params[":max_{$key}"] = $value['max'];
+				}
+			} else {
+				if (!$value) continue;
+				$criteria->addCondition("::{$key} = :{$key}");
+				$criteria->params[":{$key}"] = $value;
+			}
+		}
+	}
+
+	protected function getEavAttributes()
+	{
+		$models = EavAttribute::model()->findAll();
+		foreach ($models as $attr) {
+			$attributes[] = $attr->name;
+		}
+		return $attributes;
 	}
 }
