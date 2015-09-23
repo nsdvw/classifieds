@@ -1,8 +1,10 @@
 <div class="row">
-    {{ C.Html.label(attribute~', от', false) }}
+    {{ C.Html.label(form.model.getAttributeLabel(attribute)
+        ~'('~form.model.getAttributeUnit(attribute)~'), от', false) }}
     {{ C.Html.textField('search['~attribute~'][min]', value['min']) }}
 </div>
 <div class="row">
-    {{ C.Html.label(attribute~', до', false) }}
+    {{ C.Html.label(form.model.getAttributeLabel(attribute)
+        ~'('~form.model.getAttributeUnit(attribute)~'), до', false) }}
     {{ C.Html.textField('search['~attribute~'][max]', value['max']) }}
 </div>

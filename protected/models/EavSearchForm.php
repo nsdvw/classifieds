@@ -1,11 +1,18 @@
 <?php
 
-class ExtSearchForm extends SearchForm
+class EavSearchForm extends SearchForm
 {
     public $eav;
+    public $model;
 
-    public function setEav(array $eav)
+    public function __construct(Ad $model)
     {
+        $this->model = $model;
+    }
+
+    public function setEav()
+    {
+        $eav = $this->model->eavAttributes;
         $variants = AttrVariant::getVariants($eav);
         foreach ($eav as $attr=>$val) {
             if (array_key_exists($attr, $variants)) {

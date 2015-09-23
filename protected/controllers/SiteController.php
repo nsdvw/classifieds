@@ -62,32 +62,25 @@ class SiteController extends Controller
 		$commonCriteria->condition = $pagerCriteria->condition = $condition;
 		$pagerCriteria->order = 'added DESC';
 
-		$form = new ExtSearchForm;
 		$dropDownLists = array(); // list of key=>value for dropDownLists
-		$dummy = new Ad; // need only to get eavAttributes by category id
+		$model = new Ad; // need only to get eavAttributes by category id
+		$form = new EavSearchForm($model);
 		if ($id) {
-			$childrenIds = Category::getChildrenIds($id);
+			$childrenIds = Category::getDescendantIds($id);
 			if ($childrenIds) {
 				$commonCriteria->addInCondition('category_id', $childrenIds);
 				$pagerCriteria->addInCondition('category_id', $childrenIds);
 			}
-			$dummy->attachEavSet(Category::model()->findByPk($id)->set_id);
-			$form->setEav($dummy->eavAttributes);
+			$form->model->attachEavSet(Category::model()->findByPk($id)->set_id);
+			$form->setEav();
 			if (isset($_GET['search'])) {
-				$attributes = $this->getEavAttributes();
-				foreach ($_GET['search'] as $key=>$value) {
-					if (!in_array($key, $attributes)) continue;
-					$form->eav[$key] = $value;
-				}
+				$this->fillEavForm($form);
 				$this->buildCriteria($commonCriteria);
 				$this->buildCriteria($pagerCriteria);
 			}
-			$form->region_id = Yii::app()->request->getQuery('region_id');
-			$form->city_id = Yii::app()->request->getQuery('city_id');
-			$form->word = Yii::app()->request->getQuery('word');
 			$childCategories = Category::getChildren($id);
 			$dropDownLists = array('category' => $childCategories);
-			$attrVariants = AttrVariant::getVariants($dummy->eavAttributes);
+			$attrVariants = AttrVariant::getVariants($form->model->eavAttributes);
 			$dropDownLists = array_merge($dropDownLists, $attrVariants);
 		}
 
@@ -98,7 +91,7 @@ class SiteController extends Controller
 		$models = Ad::model()->withEavAttributes()->with(
 			'author', 'category', 'city', 'photos'
 			)->findAll($pagerCriteria);
-		//var_dump($pagerCriteria->condition, $commonCriteria->condition); Yii::app()->end();
+
 		$dp = new CActiveDataProvider('Ad', array(
 			'data'=>$models,
 			//'countCriteria'=>$commonCriteria,
@@ -220,7 +213,7 @@ class SiteController extends Controller
 
 	protected function buildCriteria(CDbCriteria $criteria, $getParam = 'search')
 	{
-		$attributes = $this->getEavAttributes();
+		$attributes = Ad::getEavList();
 		foreach ($_GET[$getParam] as $key=>$value) {
 			if (!in_array($key, $attributes)) continue;
 			if (is_array($value)) {
@@ -240,12 +233,15 @@ class SiteController extends Controller
 		}
 	}
 
-	protected function getEavAttributes()
+	protected function fillEavForm(EavSearchForm $form, $getParam = 'search')
 	{
-		$models = EavAttribute::model()->findAll();
-		foreach ($models as $attr) {
-			$attributes[] = $attr->name;
+		$attributes = Ad::getEavList();
+		foreach ($_GET[$getParam] as $key=>$value) {
+			if (!in_array($key, $attributes)) continue;
+			$form->eav[$key] = $value;
 		}
-		return $attributes;
+		$form->region_id = Yii::app()->request->getQuery('region_id');
+		$form->city_id = Yii::app()->request->getQuery('city_id');
+		$form->word = Yii::app()->request->getQuery('word');
 	}
 }

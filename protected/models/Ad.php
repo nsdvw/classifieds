@@ -25,6 +25,8 @@
  */
 class Ad extends EavActiveRecord
 {
+	private $eavAttributeInstances;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -140,5 +142,29 @@ class Ad extends EavActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public static function getEavList()
+	{
+		$models = EavAttribute::model()->findAll();
+		foreach ($models as $attr) {
+			$attributes[] = $attr->name;
+		}
+		return $attributes;
+	}
+
+	public function getAttributeUnit($attribute)
+	{
+		$this->setAttributeInstances();
+		return $this->eavAttributeInstances[$attribute]->unit;
+	}
+
+	protected function setAttributeInstances()
+	{
+		$set = EavSet::model()->findByPk($this->eav_set_id);
+		$attributes = $set->getEavAttributes();
+		foreach ($attributes as $attr) {
+			$this->eavAttributeInstances[$attr->name] = $attr;
+		}
 	}
 }
