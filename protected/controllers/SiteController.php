@@ -54,13 +54,9 @@ class SiteController extends Controller
 	 */
 	public function actionSearch($id=null,$word=null,$city=null,$page=null)
 	{
-		$pageSize = 1;
-		$condition = "status='unpublished'";
-
-		$commonCriteria = new CDbCriteria;
-		$pagerCriteria = new CDbCriteria;
-		$commonCriteria->condition = $pagerCriteria->condition = $condition;
-		$pagerCriteria->order = 'added DESC';
+		$criteria = new CDbCriteria;
+		$criteria->condition = "status='unpublished'";
+		$criteria->order = 'added DESC';
 
 		$dropDownLists = array(); // list of key=>value for dropDownLists
 		$model = new Ad; // need only to get eavAttributes by category id
@@ -68,15 +64,13 @@ class SiteController extends Controller
 		if ($id) {
 			$childrenIds = Category::getDescendantIds($id);
 			if ($childrenIds) {
-				$commonCriteria->addInCondition('category_id', $childrenIds);
-				$pagerCriteria->addInCondition('category_id', $childrenIds);
+				$criteria->addInCondition('category_id', $childrenIds);
 			}
 			$form->model->attachEavSet(Category::model()->findByPk($id)->set_id);
 			$form->setEav();
 			if (isset($_GET['search'])) {
 				$this->fillEavForm($form);
-				$this->buildCriteria($commonCriteria);
-				$this->buildCriteria($pagerCriteria);
+				$this->buildCriteria($criteria);
 			}
 			$childCategories = Category::getChildren($id);
 			$dropDownLists = array('category' => $childCategories);
@@ -84,20 +78,13 @@ class SiteController extends Controller
 			$dropDownLists = array_merge($dropDownLists, $attrVariants);
 		}
 
-		$totalCount = Ad::model()->withEavAttributes()->count($commonCriteria);
-		$pages = new CPagination($totalCount);
-		$pages->pageSize = $pageSize;
-		$pages->applyLimit($pagerCriteria);
-		$models = Ad::model()->withEavAttributes()->with(
-			'author', 'category', 'city', 'photos'
-			)->findAll($pagerCriteria);
-
-		$dp = new CActiveDataProvider('Ad', array(
-			'data'=>$models,
-			//'countCriteria'=>$commonCriteria,
-		    'pagination'=>$pages,
+		$dp = new EavActiveDataProvider('Ad', array(
+			'criteria'=>$criteria,
+			'countCriteria'=>array(
+				'condition'=>$criteria->condition,
+				'params'=>$criteria->params),
+		    'pagination'=>array('pageSize'=>2),
 			));
-		$dp->setTotalItemCount($totalCount);
 
 		$this->setDependentCascadeDropDown();
 

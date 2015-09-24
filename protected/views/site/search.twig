@@ -31,8 +31,11 @@
             {% endif %}
         </div>
     {% endfor %}
-    <div><input type="submit"></div>
     <div class="clear"></div>
+    <div class="row">
+        {{ C.Html.resetButton('очистить') }}
+        {{ C.Html.submitButton('Поиск') }}
+    </div>
     {{ C.Html.endForm() }}
 </div>
 

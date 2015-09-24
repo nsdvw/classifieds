@@ -2,10 +2,10 @@
     height: 120px;
 }
 .ad-preview {
-    background: rgb(242,242,242);
+    background: #eee;
     text-align: center;
     line-height: 120px;
-    display: inline-block;
+    display: block;
 }
 .thumb-small {
     vertical-align: middle;
@@ -13,6 +13,8 @@
 .image-container {
     width: 170px;
     float: left;
+    /*background: red;*/
+    text-align: center;
 }
 .ad-description {
     margin: 0 175px;

@@ -1,6 +1,6 @@
 <div class="ad-item">
     <div class="price-container">
-        {{ data.price }}
+        {{ data.price~' '~data.getAttributeUnit('price')~'.' }}
     </div>
 
     <div class="image-container">
