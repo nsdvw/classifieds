@@ -24,7 +24,7 @@
     </div>
     {% for attribute, value in form.eav %}
         <div class="eav-wrapper">
-            {% if dropDownLists[attribute] %}
+            {% if form.model.getEavVariants(attribute) %}
                 {% include 'views/eav/dropDownSearch.twig' %}
             {% else %}
                 {% include 'views/eav/doubleTextInput.twig' %}

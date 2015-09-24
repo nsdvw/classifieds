@@ -58,24 +58,17 @@ class SiteController extends Controller
 		$criteria->condition = "status='unpublished'";
 		$criteria->order = 'added DESC';
 
-		$dropDownLists = array(); // list of key=>value for dropDownLists
-		$model = new Ad; // need only to get eavAttributes by category id
-		$form = new EavSearchForm($model);
+		$form = new EavSearchForm();
 		if ($id) {
 			$childrenIds = Category::getDescendantIds($id);
-			if ($childrenIds) {
+			if ($childrenIds)
 				$criteria->addInCondition('category_id', $childrenIds);
-			}
 			$form->model->attachEavSet(Category::model()->findByPk($id)->set_id);
-			$form->setEav();
+			$form->eav = $form->model->eavAttributes;
 			if (isset($_GET['search'])) {
 				$this->fillEavForm($form);
 				$this->buildCriteria($criteria);
 			}
-			$childCategories = Category::getChildren($id);
-			$dropDownLists = array('category' => $childCategories);
-			$attrVariants = AttrVariant::getVariants($form->model->eavAttributes);
-			$dropDownLists = array_merge($dropDownLists, $attrVariants);
 		}
 
 		$dp = new EavActiveDataProvider('Ad', array(
@@ -93,7 +86,7 @@ class SiteController extends Controller
 			array(
 				'dataProvider'=>$dp,
 				'form'=>$form,
-				'dropDownLists'=>$dropDownLists));
+				));
 	}
 
 	/**

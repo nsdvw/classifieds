@@ -2,6 +2,6 @@
     {{ C.Html.label(form.model.getAttributeLabel(attribute), false) }}
     {{ C.Html.dropDownList(
         'search['~attribute~']', value,
-        dropDownLists[attribute], {'empty':'выбрать'})
+        form.model.getEavVariants(attribute), {'empty':'выбрать'})
     }}
 </div>

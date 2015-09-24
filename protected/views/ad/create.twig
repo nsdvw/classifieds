@@ -7,7 +7,7 @@
     'htmlOptions': {'enctype':'multipart/form-data'}
 }) %}
 {{ form.errorSummary(model) }}
-{% if hasChildren %}
+{% if model.getCategoryList(App.request.getQuery('id')) %}
     {% include 'views/ad/_subcategory.twig' %}
 {% else %}
     {% include 'views/ad/_inputhidden.twig' %}
@@ -24,7 +24,7 @@
 </div>
 {#{ this.widget('EavForm', {'model': model}, true) }#}
 {% for key in model.eavAttributes|keys %}
-    {% if dropDownLists[key] %} 
+    {% if model.getEavVariants(key) %} 
         {% include 'views/eav/dropDown.twig' ignore missing %}
     {% else %}
         {% include 'views/eav/textInput.twig' ignore missing %}

@@ -92,21 +92,14 @@ class AdController extends Controller
 	public function actionCreate($id)
 	{
 		$model = new Ad;
-		$childCategories = Category::getChildren($id);
-		$dropDownLists = array('category' => $childCategories);
-		$hasChildren = ($childCategories) ? true : false; 
 		$model->attachEavSet(Category::model()->findByPk($id)->set_id);
 		$model->category_id = $id;
 
-		$attrVariants = AttrVariant::getVariants($model->eavAttributes);
-		$dropDownLists = array_merge($dropDownLists, $attrVariants);
-
 		$photo = new Photo;
-
 		if (isset($_POST['Ad'])) {
 			$model->attributes = $_POST['Ad'];
 			$model->author_id = Yii::app()->user->id;
-			$model->city_id = 4400; // ??? в куках его сохранить что ли
+			$model->city_id = 4400;
 			if ($model->saveWithEavAttributes()) {
 				if (isset($_FILES['images'])) {
 					$images = CUploadedFile::getInstancesByName('images');
@@ -123,8 +116,6 @@ class AdController extends Controller
 
 		$this->render('create', array(
 			'model'=>$model,
-			'hasChildren'=>$hasChildren,
-			'dropDownLists'=>$dropDownLists,
 			'photo'=>$photo,
 		));
 	}

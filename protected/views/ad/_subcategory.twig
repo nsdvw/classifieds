@@ -1,5 +1,5 @@
 <div class="row">
     {{ form.labelEx(model, 'category_id') }}
-    {{ form.dropDownList(model, 'category_id', dropDownLists['category'], {'empty':'выбрать'}) }}
+    {{ form.dropDownList(model, 'category_id', model.getCategoryList(App.request.getQuery('id')), {'empty':'выбрать'}) }}
     {{ form.error(model, 'category_id') }}
 </div>

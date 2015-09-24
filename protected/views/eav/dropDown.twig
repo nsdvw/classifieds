@@ -1,5 +1,5 @@
 <div class="row">
     {{ C.Html.activeLabel(model, key) }}
-    {{ C.Html.activeDropDownList(model, key, dropDownLists[key], {'empty':'выбрать'}) }}
+    {{ C.Html.activeDropDownList(model, key, model.getEavVariants(key), {'empty':'выбрать'}) }}
     {{ C.Html.error(model, key) }}
 </div>

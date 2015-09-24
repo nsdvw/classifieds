@@ -167,4 +167,15 @@ class Ad extends EavActiveRecord
 			$this->eavAttributeInstances[$attr->name] = $attr;
 		}
 	}
+
+	public function getEavVariants($attrName)
+	{
+		$attr = EavAttribute::model()->findByAttributes(array('name'=>$attrName));
+		return $attr->getPossibleValues();
+	}
+
+	public function getCategoryList($id)
+	{
+		return Category::getChildren($id);
+	}
 }

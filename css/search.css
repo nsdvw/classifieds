@@ -17,7 +17,7 @@
     text-align: center;
 }
 .ad-description {
-    margin: 0 175px;
+    margin: 0 185px;
     height: 100%;
     overflow: hidden;
 }
@@ -45,5 +45,5 @@
     float: left;
 }
 .ad-item {
-    margin: 5px 0;
+    margin: 20px 0;
 }
