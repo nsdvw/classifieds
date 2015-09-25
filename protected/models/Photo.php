@@ -171,4 +171,17 @@ class Photo extends CActiveRecord
 		}
 		$new_img->saveToFile($thumbDir . $label . '_' . $name);
 	}
+
+	public static function validateMultiple(array $images, $model_id)
+	{
+		foreach ($images as $image) {
+			$photo = new self;
+			$photo->image = $image;
+			$photo->name = $photo->image->getName();
+			$photo->ad_id = $model_id;
+			$photos[] = $photo;
+			if (!$photo->validate()) return $photo;
+		}
+		return null;
+	}
 }

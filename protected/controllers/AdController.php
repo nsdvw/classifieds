@@ -100,18 +100,24 @@ class AdController extends Controller
 		if (isset($_POST['Ad'])) {
 			$model->attributes = $_POST['Ad'];
 			$model->author_id = Yii::app()->user->id;
+			$transaction = Yii::app()->db->beginTransaction();
 			if ($model->saveWithEavAttributes()) {
-				if (isset($_FILES['images'])) {
-					$images = CUploadedFile::getInstancesByName('images');
-					$photos = $this->getValidPhotos($images, $model->id);
-					if ($photos) {
-						foreach ($photos as $photo) {
-							$photo->save();
-						}
+				$images = CUploadedFile::getInstancesByName('images');
+				if ($images) {
+					$wrongImage = Photo::validateMultiple($images, $model->id);
+					if (!$wrongImage) {
+						foreach ($validPhotos as $photo) $photo->save();
+						$transaction->commit();
 						$this->redirect(array('view','id'=>$model->id));
+					} else {
+						$photo = $wrongImage;
+						$transaction->rollback();
 					}
+				} else {
+					$transaction->commit();
+					$this->redirect(array('view','id'=>$model->id));
 				}
-			}			
+			}
 		}
 
 		$this->render('create', array(
@@ -215,19 +221,6 @@ class AdController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
-	}
-
-	protected function getValidPhotos(array $images, $model_id)
-	{
-		foreach ($images as $image) {
-			$photo = new Photo;
-			$photo->image = $image;
-			$photo->name = $photo->image->getName();
-			$photo->ad_id = $model_id;
-			$photos[] = $photo;
-			if (!$photo->validate()) return false;
-		}
-		return $photos;
 	}
 
 	protected function getCities($country_id = 3159) // default to Russia
