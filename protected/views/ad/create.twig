@@ -1,6 +1,14 @@
 {% extends 'views/layouts/main.twig' %}
+{% block auxres %}
+    {{ Yii.void(App.clientScript.registerCoreScript('jquery')) }}
+    {{ Yii.void(App.clientScript.registerScriptFile(
+        App.request.baseUrl~'/select2-3.5.4/select2.js')) }}
+    <link rel="stylesheet" href="/select2-3.5.4/select2.css">
+    {# <script src="/select2-3.5.4/select2.js"></script> #}
+{% endblock auxres %}
 
 {% block content %}
+
 
 <div class="form">
 {% set form = this.beginWidget('CActiveForm', {
@@ -22,7 +30,6 @@
     {{ form.textArea(model, 'description') }}
     {{ form.error(model, 'description') }}
 </div>
-{#{ this.widget('EavForm', {'model': model}, true) }#}
 {% for key in model.eavAttributes|keys %}
     {% if model.getEavVariants(key) %} 
         {% include 'views/eav/dropDown.twig' ignore missing %}
@@ -31,14 +38,17 @@
     {% endif %}
 {% endfor %}
 
+<div class="row">
+    {{ C.Html.activeLabel(model, 'city_id') }}
+    {{ C.Html.activeDropDownList(
+        model, 'city_id', cities,
+        {'empty':'выбрать', 'id':'id_city'})
+    }}
+</div>
+
 {{ C.Html.activeLabel(photo, 'image') }}
 {{ C.Html.activeFileField(photo, 'image', {'multiple':'multiple','name':'images[]'}) }}
 {{ C.Html.error(photo, 'image') }}
-
-{#{ this.widget('CMultiFileUpload', {
-    'name':'images',
-    'max':5
-}, true) }#}
 
 <div class="row buttons">
     {{ C.Html.submitButton() }}
@@ -46,4 +56,7 @@
 {{ Yii.void(this.endWidget()) }}
 </div>
 
+    <script type="text/javascript">
+      $('#id_city').select2();
+    </script>
 {% endblock content %}

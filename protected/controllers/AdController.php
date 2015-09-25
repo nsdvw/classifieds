@@ -91,6 +91,7 @@ class AdController extends Controller
 	 */
 	public function actionCreate($id)
 	{
+		$cities = $this->getCities();
 		$model = new Ad;
 		$model->attachEavSet(Category::model()->findByPk($id)->set_id);
 		$model->category_id = $id;
@@ -99,7 +100,6 @@ class AdController extends Controller
 		if (isset($_POST['Ad'])) {
 			$model->attributes = $_POST['Ad'];
 			$model->author_id = Yii::app()->user->id;
-			$model->city_id = 4400;
 			if ($model->saveWithEavAttributes()) {
 				if (isset($_FILES['images'])) {
 					$images = CUploadedFile::getInstancesByName('images');
@@ -117,6 +117,7 @@ class AdController extends Controller
 		$this->render('create', array(
 			'model'=>$model,
 			'photo'=>$photo,
+			'cities'=>$cities,
 		));
 	}
 
@@ -227,5 +228,11 @@ class AdController extends Controller
 			if (!$photo->validate()) return false;
 		}
 		return $photos;
+	}
+
+	protected function getCities($country_id = 3159) // default to Russia
+	{
+		$cities = City::model()->findAllByAttributes(array('country_id'=>$country_id));
+		return CHtml::listData($cities, 'city_id', 'name');
 	}
 }

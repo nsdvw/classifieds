@@ -20,4 +20,31 @@ class Controller extends CController
 	 * for more details on how to specify this property.
 	 */
 	public $breadcrumbs=array();
+
+	protected function setDependentCascadeDropDown(
+		$id_region = 'id_region',
+		$id_city = 'id_city',
+		$action = 'site/citydata')
+	{
+		ECascadeDropDown::master($id_region)->setDependent(
+			$id_city,
+			array('dependentLoadingLabel'=>'Loading cities ...'),
+			$action);
+	}
+
+	public function actionCitydata()
+	{
+		//check if isAjaxRequest and the needed GET params are set 
+		ECascadeDropDown::checkValidRequest();
+
+   		//load the cities for the current province id (=ECascadeDropDown::submittedKeyValue())
+		$data = City::model()->findAll(
+			'region_id=:region_id',
+			array(':region_id'=>ECascadeDropDown::submittedKeyValue())
+		);
+
+	   //Convert the data by using 
+	   //CHtml::listData, prepare the JSON-Response and Yii::app()->end 
+		ECascadeDropDown::renderListData($data,'city_id', 'name');
+	}
 }

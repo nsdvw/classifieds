@@ -54,7 +54,7 @@ class Ad extends EavActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, description, category_id', 'required'),
+			array('title, description, category_id, city_id', 'required'),
 			array('title', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -89,8 +89,8 @@ class Ad extends EavActiveRecord
 			'description' => 'Текст объявления',
 			'added' => 'Added',
 			'author_id' => 'Author',
-			'city_id' => 'City',
-			'category_id' => 'Категория',
+			'city_id' => 'Город',
+			'category_id' => 'Подкатегория',
 			'visit_counter' => 'Visit Counter',
 			'status' => 'Status',
 			'importance' => 'Importance',

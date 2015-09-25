@@ -21,6 +21,28 @@ class SiteController extends Controller
 		);
 	}
 
+	public function accessRules()
+	{
+		return array(
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('index','view','search', 'error', 'contact',
+					'login', 'logout', 'cityData'),
+				'users'=>array('*'),
+			),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('logout'),
+				'users'=>array('@'),
+			),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin'),
+				'users'=>array('admin'),
+			),
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
+		);
+	}
+
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
@@ -162,33 +184,6 @@ class SiteController extends Controller
 	{
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
-	}
-
-	public function actionCitydata()
-	{
-		//check if isAjaxRequest and the needed GET params are set 
-		ECascadeDropDown::checkValidRequest();
-
-   		//load the cities for the current province id (=ECascadeDropDown::submittedKeyValue())
-		$data = City::model()->findAll(
-			'region_id=:region_id',
-			array(':region_id'=>ECascadeDropDown::submittedKeyValue())
-		);
-
-	   //Convert the data by using 
-	   //CHtml::listData, prepare the JSON-Response and Yii::app()->end 
-		ECascadeDropDown::renderListData($data,'city_id', 'name');
-	}
-
-	protected function setDependentCascadeDropDown(
-		$id_region = 'id_region',
-		$id_city = 'id_city',
-		$action = 'site/citydata')
-	{
-		ECascadeDropDown::master($id_region)->setDependent(
-			$id_city,
-			array('dependentLoadingLabel'=>'Loading cities ...'),
-			$action);
 	}
 
 	protected function buildCriteria(CDbCriteria $criteria, $getParam = 'search')
