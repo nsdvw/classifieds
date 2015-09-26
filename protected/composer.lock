@@ -4,19 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cfd82a5a1fb4473af3a7fd59707aa21b",
+    "hash": "3ab2ecdc03dd9ce4691e8475e970d511",
     "packages": [
-        {
-            "name": "Joblo/cascadedropdown",
-            "version": "1.0",
-            "dist": {
-                "type": "zip",
-                "url": "http://www.yiiframework.com/extension/cascadedropdown/files/cascadedropdown.1.0.zip",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "library"
-        },
         {
             "name": "iachilles/eavactiverecord",
             "version": "dev-master",
@@ -208,7 +197,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii/zipball/eda86c729658b0d2b652b0a261899507af3d9159",
+                "url": "https://api.github.com/repos/yiisoft/yii/zipball/485c001e99ba1e60eabd496027e69eecdee5ed72",
                 "reference": "eda86c729658b0d2b652b0a261899507af3d9159",
                 "shasum": ""
             },

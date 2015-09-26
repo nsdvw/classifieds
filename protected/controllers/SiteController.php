@@ -64,8 +64,6 @@ class SiteController extends Controller
 			'pagination'=>false
 		));
 
-		$this->setDependentCascadeDropDown();
-
 		$this->render('index',
 			array('categories'=>$categories, 'model'=>$model, 'dataProvider'=>$dp)
 		);
@@ -112,8 +110,6 @@ class SiteController extends Controller
 				'params'=>$criteria->params),
 		    'pagination'=>array('pageSize'=>2),
 			));
-
-		$this->setDependentCascadeDropDown();
 
 		$this->render(
 			'search',
@@ -196,6 +192,20 @@ class SiteController extends Controller
 	{
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
+	}
+
+	public function actionGetcities()
+	{
+		if (!isset($_POST['id']) or empty($_POST['id'])) {
+			echo json_encode(false);
+			Yii::app()->end();
+		}
+		$regionId = intval($_POST['id']);
+		$cities = City::model()->findAllByAttributes(array('region_id'=>$regionId));
+		foreach ($cities as $city) {
+			$res[$city->city_id] = $city->name;
+		}
+		echo json_encode($res);
 	}
 
 	protected function buildEavCriteria(CDbCriteria $criteria, $getParam = 'search')

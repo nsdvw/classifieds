@@ -17,6 +17,6 @@
 .category-select li {
     margin-bottom: 5px;
 }
-#id_city {
-    width: 180px;
+#id_region, #id_city {
+    width: 150px;
 }

@@ -5,6 +5,8 @@
 {% block content %}
 
 {{ Yii.void(App.clientScript.registerCssFile(App.request.baseUrl~'/css/search.css')) }}
+{{ Yii.void(App.clientScript.registerScriptFile(
+    App.request.baseUrl~'/js/citiesDropDown.js', constant('CClientScript::POS_END'))) }}
 <div class="form">
 {{ C.Html.beginForm(App.createUrl('site/search/'~App.request.getQuery('id')), 'get') }}
     <div class="row">
@@ -13,13 +15,13 @@
         'region_id',
         form.region_id ? form.region_id : 'empty',
         form.getRegions(),
-        {'empty':'выбрать', 'id':'id_region'})
+        {'empty':'область', 'id':'id_region'})
     }}
     {{ C.Html.dropDownList(
         'city_id',
         form.city_id ? form.city_id : 'empty',
-        form.getCities(form.region_id),
-        {'empty':'выбрать', 'id':'id_city'})
+        {},
+        {'empty':'город', 'id':'id_city'})
     }}
     </div>
     {% for attribute, value in form.eav %}

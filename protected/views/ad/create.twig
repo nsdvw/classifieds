@@ -3,13 +3,14 @@
     {{ Yii.void(App.clientScript.registerCoreScript('jquery')) }}
     {{ Yii.void(App.clientScript.registerScriptFile(
         App.request.baseUrl~'/select2-3.5.4/select2.js')) }}
-    <link rel="stylesheet" href="/select2-3.5.4/select2.css">
-    {# <script src="/select2-3.5.4/select2.js"></script> #}
+    {{ Yii.void(App.clientScript.registerCssFile(
+        App.request.baseUrl~'/select2-3.5.4/select2.css')) }}
 {% endblock auxres %}
 
 {% block content %}
 
-
+{{ Yii.void(App.clientScript.registerScriptFile(
+    App.request.baseUrl~'/js/citiesDropDown.js', constant('CClientScript::POS_END'))) }}
 <div class="form">
 {% set form = this.beginWidget('CActiveForm', {
     'htmlOptions': {'enctype':'multipart/form-data'}
@@ -39,10 +40,17 @@
 {% endfor %}
 
 <div class="row">
+    {{ C.Html.label('Область', false) }}
+    {{ C.Html.dropDownList(
+        'region_id', 'empty', regions,
+        {'empty':'---------- область ----------', 'id':'id_region'})
+    }}
+</div>
+<div class="row">
     {{ C.Html.activeLabel(model, 'city_id') }}
     {{ C.Html.activeDropDownList(
-        model, 'city_id', cities,
-        {'empty':'выбрать', 'id':'id_city'})
+        model, 'city_id', {},
+        {'empty':'------------ город ------------', 'id':'id_city'})
     }}
 </div>
 
@@ -57,6 +65,7 @@
 </div>
 
     <script type="text/javascript">
+      $('#id_region').select2();
       $('#id_city').select2();
     </script>
 {% endblock content %}

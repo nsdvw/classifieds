@@ -103,4 +103,10 @@ class Region extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public static function getRegionList($country_id = 3159) // default to Russia
+	{
+		$models = self::model()->findAllByAttributes(array('country_id'=>$country_id));
+		return CHtml::listData($models, 'region_id', 'name');
+	}
 }

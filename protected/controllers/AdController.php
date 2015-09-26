@@ -91,7 +91,7 @@ class AdController extends Controller
 	 */
 	public function actionCreate($id)
 	{
-		$cities = $this->getCities();
+		$regions = Region::getRegionList();
 		$model = new Ad;
 		$model->attachEavSet(Category::model()->findByPk($id)->set_id);
 		$model->category_id = $id;
@@ -123,7 +123,7 @@ class AdController extends Controller
 		$this->render('create', array(
 			'model'=>$model,
 			'photo'=>$photo,
-			'cities'=>$cities,
+			'regions'=>$regions,
 		));
 	}
 
@@ -221,11 +221,5 @@ class AdController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
-	}
-
-	protected function getCities($country_id = 3159) // default to Russia
-	{
-		$cities = City::model()->findAllByAttributes(array('country_id'=>$country_id));
-		return CHtml::listData($cities, 'city_id', 'name');
 	}
 }
