@@ -139,6 +139,7 @@ class Category extends CActiveRecord
 		$category = self::model()->findByPk($id);
 		if (!$category) return false;
 		$children = $category->descendants()->findAll();
+		$ids = array();
 		foreach ($children as $child) {
 			$ids[] = $child->id;
 		}

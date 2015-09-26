@@ -83,13 +83,17 @@ class SiteController extends Controller
 		$form = new EavSearchForm();
 		if ($id) {
 			$childrenIds = Category::getDescendantIds($id);
-			if ($childrenIds)
+			if ($childrenIds) {
 				$criteria->addInCondition('category_id', $childrenIds);
+			} else {
+				$criteria->addCondition('category_id=:category_id');
+				$criteria->params[':category_id'] = intval($id);
+			}
 			$form->model->attachEavSet(Category::model()->findByPk($id)->set_id);
 			$form->eav = $form->model->eavAttributes;
 			if (isset($_GET['search'])) {
-				$this->fillEavForm($form);
-				$this->buildCriteria($criteria);
+				$form->fill();
+				$this->buildEavCriteria($criteria);
 			}
 		}
 
@@ -186,7 +190,7 @@ class SiteController extends Controller
 		$this->redirect(Yii::app()->homeUrl);
 	}
 
-	protected function buildCriteria(CDbCriteria $criteria, $getParam = 'search')
+	protected function buildEavCriteria(CDbCriteria $criteria, $getParam = 'search')
 	{
 		$attributes = Ad::getEavList();
 		foreach ($_GET[$getParam] as $key=>$value) {
@@ -206,17 +210,5 @@ class SiteController extends Controller
 				$criteria->params[":{$key}"] = $value;
 			}
 		}
-	}
-
-	protected function fillEavForm(EavSearchForm $form, $getParam = 'search')
-	{
-		$attributes = Ad::getEavList();
-		foreach ($_GET[$getParam] as $key=>$value) {
-			if (!in_array($key, $attributes)) continue;
-			$form->eav[$key] = $value;
-		}
-		$form->region_id = Yii::app()->request->getQuery('region_id');
-		$form->city_id = Yii::app()->request->getQuery('city_id');
-		$form->word = Yii::app()->request->getQuery('word');
 	}
 }
