@@ -74,7 +74,7 @@ class SiteController extends Controller
 	/**
 	 * Action to search ads by key word(s?)
 	 */
-	public function actionSearch($id=null,$word=null,$city=null,$page=null)
+	public function actionSearch($id=null,$word=null,$city_id=null,$page=null)
 	{
 		$criteria = new CDbCriteria;
 		$criteria->condition = "status='unpublished'";
@@ -95,6 +95,14 @@ class SiteController extends Controller
 				$form->fill();
 				$this->buildEavCriteria($criteria);
 			}
+		}
+		if ($word) {
+			$criteria->addCondition('title LIKE :word OR description LIKE :word');
+			$criteria->params[':word'] = "%{$word}%";
+		}
+		if ($city_id) {
+			$criteria->addCondition('city_id=:city_id');
+			$criteria->params[':city_id'] = intval($city_id);
 		}
 
 		$dp = new EavActiveDataProvider('Ad', array(

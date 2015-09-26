@@ -5,6 +5,7 @@
     background: #eee;
     text-align: center;
     line-height: 120px;
+    height: 100%;
     display: block;
 }
 .thumb-small {
@@ -12,8 +13,8 @@
 }
 .image-container {
     width: 170px;
+    height: 100%;
     float: left;
-    /*background: red;*/
     text-align: center;
 }
 .ad-description {
