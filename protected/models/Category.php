@@ -138,11 +138,25 @@ class Category extends CActiveRecord
 	{
 		$category = self::model()->findByPk($id);
 		if (!$category) return false;
-		$children = $category->descendants()->findAll();
+		$rows = Yii::app()->db->createCommand()
+			->select('id')
+			->from('category')
+			->where('lft>=:lft AND rgt<=:rgt AND root=:root',
+					array(
+						':lft'=>$category->lft,
+						':rgt'=>$category->rgt,
+						':root'=>$category->root))
+			->queryAll(false);
+		foreach ($rows as $row) {
+			$ids[] = $row[0];
+		}
+		return $ids;
+
+		/*$children = $category->descendants()->findAll();
 		$ids = array();
 		foreach ($children as $child) {
 			$ids[] = $child->id;
 		}
-		return $ids;
+		return $ids;*/
 	}
 }
