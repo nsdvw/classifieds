@@ -134,29 +134,17 @@ class Category extends CActiveRecord
 		return CHtml::listData($children, 'id', 'title');
 	}
 
-	public static function getDescendantIds($id)
+	public function getDescendantIds()
 	{
-		$category = self::model()->findByPk($id);
-		if (!$category) return false;
-		$rows = Yii::app()->db->createCommand()
+		$ids = Yii::app()->db->createCommand()
 			->select('id')
 			->from('category')
 			->where('lft>=:lft AND rgt<=:rgt AND root=:root',
-					array(
-						':lft'=>$category->lft,
-						':rgt'=>$category->rgt,
-						':root'=>$category->root))
-			->queryAll(false);
-		foreach ($rows as $row) {
-			$ids[] = $row[0];
-		}
+				array(
+					':lft'=>$this->lft,
+					':rgt'=>$this->rgt,
+					':root'=>$this->root))
+			->queryColumn();
 		return $ids;
-
-		/*$children = $category->descendants()->findAll();
-		$ids = array();
-		foreach ($children as $child) {
-			$ids[] = $child->id;
-		}
-		return $ids;*/
 	}
 }
