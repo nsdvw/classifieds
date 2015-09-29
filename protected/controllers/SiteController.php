@@ -80,7 +80,8 @@ class SiteController extends Controller
 
 		$form = new EavSearchForm();
 		if ($id) {
-			$childrenIds = Category::getDescendantIds($id);
+			$category = Category::model()->findByPk($id);
+			$childrenIds = ($category) ? $category->getDescendantIds() : null;
 			if ($childrenIds) {
 				$criteria->addInCondition('category_id', $childrenIds);
 			} else {
