@@ -30,7 +30,7 @@ $ protected/yiic migrate
 1. To change dbname or other connection settings, modify the protected/config/database.php as usual in Yii 1.1.
 
 1. Sphinx configuration is under protected/config/main.php in "params" section.
-If you do not use sphinx, comment the configuration, or leave it as is (exception will be catched and use "like" query instead sphinx).
+If you do not use sphinx, comment the configuration, or leave it as is (exception will be caught and use "like" query instead sphinx).
 
 Frameworks, extensions and libraries, used in project
 -----------------------------------------------------
