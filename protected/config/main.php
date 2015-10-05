@@ -20,7 +20,6 @@ return array(
 		'application.vendor.iachilles.eavactiverecord.*',
 		'application.vendor.iachilles.eavactiverecord.datatypes.*',
 		'application.vendor.iachilles.eavactiverecord.helpers.*',
-		'application.vendor.Joblo.cascadedropdown.ECascadeDropDown'
 	),
 
 	'modules'=>array(
@@ -97,5 +96,12 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
+		// configure to match your sphinx configuration,
+		// or comment to disable sphinxsearch
+		'sphinx'=>array(
+			'dsn'=>'mysql:host=127.0.0.1;dbname=classifieds;port=9306',
+			'user'=>'root',
+			'pass'=>'',
+		),
 	),
 );

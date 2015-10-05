@@ -96,8 +96,12 @@ class SiteController extends Controller
 			}
 		}
 		if ($word) {
-			$criteria->addCondition('title LIKE :word OR description LIKE :word');
-			$criteria->params[':word'] = "%{$word}%";
+			try {
+				$reader = $this->sphinxSearch($word);
+			} catch(Exception $e) {
+				$criteria->addCondition('title LIKE :word OR description LIKE :word');
+				$criteria->params[':word'] = "%{$word}%";
+			}
 		}
 		if ($city_id) {
 			$criteria->addCondition('city_id=:city_id');
@@ -117,7 +121,8 @@ class SiteController extends Controller
 			array(
 				'dataProvider'=>$dp,
 				'form'=>$form,
-				));
+			)
+		);
 	}
 
 	/**
@@ -229,5 +234,24 @@ class SiteController extends Controller
 				$criteria->params[":{$key}"] = $value;
 			}
 		}
+	}
+
+	/**
+	 * Search via sphinx (mysql client)
+	 */
+	private function sphinxSearch($phrase)
+	{
+		$connection = new CDbConnection(
+			Yii::app()->params['sphinx']['dsn'],
+			Yii::app()->params['sphinx']['user'],
+			Yii::app()->params['sphinx']['pass']
+		);
+		$connection->active=true;
+		$words = mb_split('[^\w]+', $phrase);
+		$words = array_filter($words); // unset empty elements
+		$search = implode('|', $words);
+		$sql = "SELECT * FROM rt_classifieds, index_classifieds WHERE MATCH('$search')";
+		$command = $connection->createCommand($sql);
+		return $command->query();
 	}
 }
