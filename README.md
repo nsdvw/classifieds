@@ -21,18 +21,11 @@ $ mysql -uuser -ppassword classifieds < protected/data/mysql.schema.sql
 1. to export current database dump (not necessary, up to you):
 - mysql -uuser -ppassword classifieds < protected/data/classifieds.sql
 
-1. if there are some migrations, execute
+1. if there are some migrations, apply them by
 
    ``` sh
-$ protected/yiic migrate new
+$ protected/yiic migrate
 ```
-
-to see available migrations and
-
-   ``` sh
-$ ptotected/yiic migrate"
-```
-to apply them.
 
 1. To change dbname or other connection settings, modify the protected/config/database.php as usual in Yii 1.1.
 
