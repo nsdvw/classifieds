@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "hash": "3ab2ecdc03dd9ce4691e8475e970d511",
+    "content-hash": "33ad8208d5d63069aa91290a1e7cf302",
     "packages": [
         {
             "name": "iachilles/eavactiverecord",
@@ -55,7 +56,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smottt/WideImage/zipball/669f63f1452c7fc70120fff4bc457727714a0834",
+                "url": "https://api.github.com/repos/smottt/WideImage/zipball/56803f947bfdbe147fd5eb3607fd3450d4a224fc",
                 "reference": "669f63f1452c7fc70120fff4bc457727714a0834",
                 "shasum": ""
             },

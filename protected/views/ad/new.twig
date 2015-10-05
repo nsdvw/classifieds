@@ -4,7 +4,7 @@
 <h3>Выберите категорию</h3>
 {{ Yii.void(App.clientScript.registerCoreScript('jquery')) }}
 {{ Yii.void(App.clientScript.registerCssFile(App.request.baseUrl~'/css/create.css')) }}
-{{ Yii.void(App.clientScript.registerScriptFile(App.request.baseUrl~'/js/new.js', constant(''))) }}
+{{ Yii.void(App.clientScript.registerScriptFile(App.request.baseUrl~'/js/new.js', constant('CClientScript::POS_END'))) }}
 <table class="category-select">
     <tr>
         <td class="first-level">
