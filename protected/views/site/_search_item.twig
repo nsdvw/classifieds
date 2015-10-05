@@ -1,6 +1,8 @@
 <div class="ad-item">
     <div class="price-container">
-        {{ data.price~' '~data.getAttributeUnit('price')~'.' }}
+        {% if not data.isEavAttributeEmpty('price') %}
+        {{ data.getEavAttribute('price')~' '~data.getAttributeUnit('price')~'.' }}
+        {% endif %}
     </div>
 
     <div class="image-container">

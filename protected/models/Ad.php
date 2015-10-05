@@ -35,10 +35,10 @@ class Ad extends EavActiveRecord
 		return 'ad';
 	}
 
-	public function __call($name, array $params = null)
+	/*public function __call($name, array $params = null)
     {
         return '';
-    }
+    }*/
 
 /*	protected $price;
 	public function getPrice()
@@ -172,6 +172,21 @@ class Ad extends EavActiveRecord
 	{
 		$attr = EavAttribute::model()->findByAttributes(array('name'=>$attrName));
 		return $attr->getPossibleValues();
+	}
+
+	/**
+	 * There is an issue/bug in twig-renderer extension for yii:
+	 * it throws an exception when property value equals to NULL, see
+	 * https://github.com/twigphp/Twig/issues/1557
+	 * so need a solution to get around with the problem.
+	 */
+	public function isEavAttributeEmpty($attrName)
+	{
+		if (!$this->hasEavAttribute($attrName) or !$this->getEavAttribute($attrName)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public function getCategoryList($id)
