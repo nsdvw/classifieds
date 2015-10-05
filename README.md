@@ -10,8 +10,11 @@ Features:
 Installation
 ------------
 1. Clone repository
+
 1. cd to "protected" folder
+
 1. composer install
+
 1. To create database schema you need:
 
    ``` sh
@@ -43,6 +46,6 @@ https://github.com/yiiext/nested-set-behavior
 1. Twig view template engine
 http://twig.sensiolabs.org/
 1. Twig view renderer extention for yii
-http://www.yiiframework.com/
+https://github.com/yiiext/twig-renderer
 1. WideImage library
 http://wideimage.sourceforge.net/
