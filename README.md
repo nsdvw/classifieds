@@ -10,6 +10,9 @@ Features:
 Installation
 ------------
 1. Clone repository
+   ``` sh
+$ git clone https://github.com/nsdvw/classifieds.git
+```
 
 1. cd to "protected" folder
 
@@ -21,8 +24,10 @@ Installation
 $ mysql -uuser -ppassword classifieds < protected/data/mysql.schema.sql
 ```
 
-1. to export current database dump (not necessary, up to you):
-- mysql -uuser -ppassword classifieds < protected/data/classifieds.sql
+1. To export current database dump for testing (not necessary, up to you):
+   ``` sh
+$ mysql -uuser -ppassword classifieds < protected/data/classifieds.sql
+```
 
 1. if there are some migrations, apply them by
 
@@ -33,7 +38,7 @@ $ protected/yiic migrate
 1. To change dbname or other connection settings, modify the protected/config/database.php as usual in Yii 1.1.
 
 1. Sphinx configuration is under protected/config/main.php in "params" section.
-If you do not use sphinx, comment the configuration, or leave it as is (exception will be caught and use "like" query instead sphinx).
+If you do not use sphinx, comment the configuration, or leave it as is (exception will be caught and use "like" query instead of sphinx).
 
 Frameworks, extensions and libraries, used in project
 -----------------------------------------------------
@@ -43,7 +48,7 @@ https://github.com/yiisoft/yii
 https://github.com/iAchilles/eavactiverecord
 1. Nested set behavior for yii
 https://github.com/yiiext/nested-set-behavior
-1. Twig view template engine
+1. Twig template engine
 http://twig.sensiolabs.org/
 1. Twig view renderer extention for yii
 https://github.com/yiiext/twig-renderer

@@ -102,6 +102,7 @@ return array(
 			'dsn'=>'mysql:host=127.0.0.1;dbname=classifieds;port=9306',
 			'user'=>'root',
 			'pass'=>'',
+			'indexes'=>array('rt_classifieds', 'index_classifieds'),
 		),
 	),
 );

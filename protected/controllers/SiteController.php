@@ -250,7 +250,9 @@ class SiteController extends Controller
 		$words = mb_split('[^\w]+', $phrase);
 		$words = array_filter($words); // unset empty elements
 		$search = implode('|', $words);
-		$sql = "SELECT * FROM rt_classifieds, index_classifieds WHERE MATCH('$search')";
+		$sphinxIndexes = Yii::app()->params['sphinx']['indexes'];
+		$sphinxIndexes = implode(',', $sphinxIndexes);
+		$sql = "SELECT * FROM $sphinxIndexes WHERE MATCH('$search')";
 		$command = $connection->createCommand($sql);
 		return $command->query();
 	}
