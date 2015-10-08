@@ -106,7 +106,13 @@ class AdController extends Controller
 				if ($images) {
 					$wrongImage = Photo::validateMultiple($images, $model->id);
 					if (!$wrongImage) {
-						foreach ($images as $image) $image->save(false);
+						foreach ($images as $image) {
+							$photo = new Photo;
+							$photo->image = $image;
+							$photo->name = $photo->image->getName();
+							$photo->ad_id = $model->id;
+							$photo->save(false);
+						}
 						$transaction->commit();
 						$this->redirect(array('view','id'=>$model->id));
 					} else {
