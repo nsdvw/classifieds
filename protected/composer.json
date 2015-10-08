@@ -31,6 +31,7 @@
       "yiiext/twig-renderer":"1.1.*",
       "yiiext/nested-set-behavior": "dev-master",
       "iachilles/eavactiverecord": "dev-master",
-      "smottt/wideimage":"dev-master"
+      "smottt/wideimage":"dev-master",
+    "fzaninotto/faker": "^1.5"
   }
 }
