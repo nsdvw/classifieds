@@ -1,6 +1,8 @@
 <?php
 
 mb_internal_encoding("UTF-8");
+// enable composer autoload
+require dirname(__FILE__).'/protected/vendor/autoload.php';
 
 // change the following paths if necessary
 $yii=dirname(__FILE__).'/protected/vendor/yiisoft/yii/framework/yii.php';
