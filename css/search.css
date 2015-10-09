@@ -21,6 +21,7 @@
     margin: 0 185px;
     height: 100%;
     overflow: hidden;
+    position: relative;
 }
 .ad-title {
     font-size: 1.25em;
@@ -32,8 +33,13 @@
     height: 100%;
 }
 .ad-city {
-    margin: 60px 0 10px;
     font-weight: bold;
+    position: absolute;
+    bottom: 15px;
+}
+.ad-added {
+    position: absolute;
+    bottom: 0;
 }
 .price-container {
     box-sizing: border-box;

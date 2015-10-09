@@ -113,7 +113,7 @@ class SiteController extends Controller
 			'countCriteria'=>array(
 				'condition'=>$criteria->condition,
 				'params'=>$criteria->params),
-		    'pagination'=>array('pageSize'=>2),
+		    'pagination'=>array('pageSize'=>10),
 			));
 
 		$this->render(
