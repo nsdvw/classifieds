@@ -12,49 +12,14 @@ class FakerController extends Controller
         $faker = Faker\Factory::create('ru_RU');
 
         echo date('H:i:s') . ' Start!<br>';
-        echo date('H:i:s') . ' Begin creating users.<br>';
-        /*for ($i=0; $i < 100; $i++) {
-            $this->createLegion($faker, 1000);
-        }*/
-        echo date('H:i:s') . ' End creating users.<br>';
+        // Uncomment to create users
+        // $this->createUsers($faker, 100); // number of users in thousands
 
-        $sets = EavSet::model()->with('eavAttribute')->findAll();
-        foreach ($sets as $s) {
-            $setsAssoc[$s->id] = $s;
-        }
+        // Uncomment to create ads
+        // $this->createAds($faker);
 
-        $sql = "SELECT city_id FROM city WHERE country_id=3159";
-        $cities = Yii::app()->db->createCommand($sql)->queryColumn();
-
-        $sql = "SELECT id FROM user";
-        $users = Yii::app()->db->createCommand($sql)->queryColumn();
-
-        $categories = $this->getCategories();
-        echo date('H:i:s') . ' Begin creating ads.<br>';
-        /*foreach ($categories as $c) {
-            if ($c['lft'] + 1 != $c['rgt']) continue; // search leaves
-            for ($i=0; $i < 1; $i++) {
-                $this->createAds($faker, $c, $cities, $users, 50);
-            }
-            // break;
-        }*/
-        echo date('H:i:s') . ' End creating ads.<br>';
-
-        echo date('H:i:s') . ' Begin attaching eav-attributes to ads.<br>';
-        $sql = "SELECT count(*) FROM ad";
-        $totalCount = intval(Yii::app()->db->createCommand($sql)->queryScalar());
-        $perQuery = 10000;
-        $offset = 0;
-        while ($offset < /*$totalCount*/ 1) {
-            $transaction = Yii::app()->db->beginTransaction();
-            $sql = "SELECT id, eav_set_id FROM ad LIMIT {$offset}, {$perQuery}";
-            $ads = Yii::app()->db->createCommand($sql)->queryAll();
-            $this->attachEavAttributes($ads, $setsAssoc);
-            $offset += $perQuery;
-            $transaction->commit();
-        }
-        echo date('H:i:s') . ' End attaching eav-attributes to ads.<br>';
-
+        // Uncomment to attach eav attributes to all ads that already exist in db
+        $this->attachEavAttributes();
         echo date('H:i:s') . ' Finish!<br>';
     }
 
@@ -84,7 +49,7 @@ class FakerController extends Controller
         return Yii::app()->db->createCommand($sql)->queryAll();
     }
 
-    private function createAds(
+    private function createAdsPerCategory(
         Faker\Generator $faker,
         array $category,
         array $cities,
@@ -114,10 +79,23 @@ class FakerController extends Controller
         Yii::app()->db->createCommand($sql)->execute();
     }
 
-    private function attachEavAttributes(array $ads, array $sets)
+    private function attachEavAttributes()
     {
-        foreach ($ads as $ad) {
-            $set = $sets[$ad['eav_set_id']];
+        echo date('H:i:s') . ' Begin attaching eav-attributes to ads.<br>';
+        $sets = EavSet::model()->with('eavAttribute')->findAll();
+        foreach ($sets as $s) {
+            $setsAssoc[$s->id] = $s;
+        }
+        $sql = "SELECT count(*) FROM ad";
+        $totalCount = intval(Yii::app()->db->createCommand($sql)->queryScalar());
+        $perQuery = 10000;
+        $offset = 0;
+        while ($offset < $totalCount) {
+            $transaction = Yii::app()->db->beginTransaction();
+            $sql = "SELECT id, eav_set_id FROM ad LIMIT {$offset}, {$perQuery}";
+            $ads = Yii::app()->db->createCommand($sql)->queryAll();
+            foreach ($ads as $ad) {
+            $set = $setsAssoc[$ad['eav_set_id']];
             foreach ($set->eavAttribute as $a) {
                 $rawData = unserialize($a->data);
                 if ($a->data_type == 'IntDataType') {
@@ -128,7 +106,14 @@ class FakerController extends Controller
                     $max = (isset($rawData['rules']['numerical']['max']))
                             ? intval($rawData['rules']['numerical']['max'])
                             : 100000000;
-                    $value = rand($min, intval($max/100));
+                    if ($a->name == 'price') {
+                        $value = rand($min, intval($max/100));
+                    } elseif ($a->name == 'modelYear') {
+                        $max = intval(date('Y'));
+                        $value = rand($min, $max);
+                    } else {
+                        $value = rand($min, $max);
+                    }
                 } elseif ($a->data_type == 'VarcharDataType') {
                     $tbl = 'eav_attribute_varchar';
                     $value = array_rand($rawData['values']);
@@ -138,6 +123,38 @@ class FakerController extends Controller
                     VALUES ('{$a->id}', '{$ad['id']}', 'ad', '$value')";
                 Yii::app()->db->createCommand($sql)->execute();
             }
+            }
+            $offset += $perQuery;
+            $transaction->commit();
         }
+        echo date('H:i:s') . ' End attaching eav-attributes to ads.<br>';
+    }
+
+    private function createUsers(Faker\Generator $faker, $thousand = 100)
+    {
+        echo date('H:i:s') . ' Begin creating users.<br>';
+        for ($i=0; $i < $thousand; $i++) {
+            $this->createLegion($faker, 1000);
+        }
+        echo date('H:i:s') . ' End creating users.<br>';
+    }
+
+    private function createAds(Faker\Generator $faker)
+    {
+        echo date('H:i:s') . ' Begin creating ads.<br>';
+
+        $sql = "SELECT city_id FROM city WHERE country_id=3159";
+        $cities = Yii::app()->db->createCommand($sql)->queryColumn();
+        $sql = "SELECT id FROM user";
+        $users = Yii::app()->db->createCommand($sql)->queryColumn();
+        $categories = $this->getCategories();
+
+        foreach ($categories as $c) {
+            if ($c['lft'] + 1 != $c['rgt']) continue; // search leaves
+            for ($i=0; $i < 1; $i++) {
+                $this->createAdsPerCategory($faker, $c, $cities, $users, 50);
+            }
+        }
+        echo date('H:i:s') . ' End creating ads.<br>';
     }
 }
