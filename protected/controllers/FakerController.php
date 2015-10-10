@@ -19,7 +19,10 @@ class FakerController extends Controller
         // $this->createAds($faker);
 
         // Uncomment to attach eav attributes to all ads that already exist in db
-        $this->attachEavAttributes();
+        //$this->attachEavAttributes();
+
+        // Uncomment to attach photos to ads
+        $this->attachPhotos($faker);
         echo date('H:i:s') . ' Finish!<br>';
     }
 
@@ -156,5 +159,38 @@ class FakerController extends Controller
             }
         }
         echo date('H:i:s') . ' End creating ads.<br>';
+    }
+
+    private function attachPhotos(Faker\Generator $faker)
+    {
+        echo date('H:i:s') . ' Begin attaching photos to ad.<br>';
+        $sql = "SELECT count(*) FROM ad";
+        $totalCount = intval(Yii::app()->db->createCommand($sql)->queryScalar());
+        $perQuery = 10000;
+        $offset = 0;
+        while ($offset < $totalCount) {
+            $sql = "SELECT id FROM ad LIMIT {$offset}, {$perQuery}";
+            $ads = Yii::app()->db->createCommand($sql)->queryAll();
+            $sql = "INSERT INTO photo (name, ad_id) VALUES ";
+            $j=0;
+            foreach ($ads as $ad) {
+                $count = rand(0,5);
+                if ($j == 0 and $count == 0) {
+                    $count++;
+                }
+                for ($i=0; $i < $count; $i++) {
+                    $name = $faker->word;
+                    if ($i == 0 and $j == 0) {
+                        $sql .= "('{$name}',{$ad['id']})";
+                    } else {
+                        $sql .= ",('{$name}',{$ad['id']})";
+                    }
+                }
+                $j++;
+            }
+            $offset += $perQuery;
+            Yii::app()->db->createCommand($sql)->execute();
+        }
+        echo date('H:i:s') . ' End attaching photos to ad.<br>';
     }
 }
