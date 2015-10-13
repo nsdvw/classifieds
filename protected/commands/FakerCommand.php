@@ -21,13 +21,21 @@ class FakerCommand extends CConsoleCommand
         $data = array();
         $insertCount = intval(floor($cnt/self::PER_INSERT));
         $builder = Yii::app()->db->getSchema()->getCommandBuilder();
+        $txn = Yii::app()->db->beginTransaction();
         for ($i=0; $i < $insertCount; $i++) {
             $data = $this->collectUserData();
             $this->multipleInsert($builder, $table, $data);
+            if ($i % self::PER_TRANSACTION == 0) {
+                $txn->commit();
+                $txn = Yii::app()->db->beginTransaction();
+            }
         }
         $remainder = $cnt % self::PER_INSERT;
-        $data = $this->collectUserData($remainder);
-        $this->multipleInsert($builder, $table, $data);
+        if ($remainder) {
+            $data = $this->collectUserData($remainder);
+            $this->multipleInsert($builder, $table, $data);
+            $txn->commit();
+        }
     }
 
     private function multipleInsert($builder, $table, $data)
