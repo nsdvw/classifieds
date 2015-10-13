@@ -1,8 +1,5 @@
 <?php
 
-$composerPath = Yii::getPathOfAlias('application.vendor');
-require $composerPath . DIRECTORY_SEPARATOR . 'autoload.php';
-
 class FakerCommand extends CConsoleCommand
 {
     const PER_INSERT = 100;
