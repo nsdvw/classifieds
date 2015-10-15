@@ -6,13 +6,21 @@ class FakerCommand extends CConsoleCommand
     const PER_TRANSACTION = 100; // how many queries should contain one transaction
 
     private $faker;
+    private $fakerData;
     public function init()
     {
         $this->faker = Faker\Factory::create('ru_RU');
+        for ($i = 0; $i < 1000; $i++) {
+            $fakerData['names'][] = $this->faker->name;
+            $fakerData['phoneNumbers'][] = $this->faker->phoneNumber;
+            $fakerData['emails'][] = $this->faker->safeEmail;
+        }
+        $this->fakerData = $fakerData;
     }
 
     public function actionUser($cnt = 1000)
     {
+        echo date('H:i:s') . "\n";
         $table = 'user';
         $insertCount = intval(floor($cnt/self::PER_INSERT));
         $builder = Yii::app()->db->getSchema()->getCommandBuilder();
@@ -32,6 +40,7 @@ class FakerCommand extends CConsoleCommand
             $this->multipleInsert($builder, $table, $data);
         }
         $txn->commit();
+        echo date('H:i:s') . "\n";
     }
 
     private function multipleInsert($builder, $table, $data)
@@ -45,10 +54,11 @@ class FakerCommand extends CConsoleCommand
         $data = array();
         for ($i=0; $i < $cnt; $i++) {
             $data[] = array(
-                'email' => $this->getEmail(),
-                'password' => $this->faker->password,
-                'name' => $this->faker->name,
-                'phone' => $this->faker->phoneNumber,
+                'email' => $this->getEmail($i),
+                // use 'demo' to login
+                'password' => '$2y$13$gT2xqTJiIdQjHXUvVIwePOgGINJQmX6m7wdAZefcw8lQasxtGOple',
+                'name' => $this->fakerData['names'][$i],
+                'phone' => $this->fakerData['phoneNumbers'][$i],
             );
         }
         return $data;
@@ -59,9 +69,8 @@ class FakerCommand extends CConsoleCommand
         echo round($cur * 100 / $cnt, 2) . "%\n";
     }
 
-    private function getEmail()
+    private function getEmail($seed)
     {
-        $alphabet = range('a', 'z');
-        return $alphabet[rand(0, 25)] . rand(10000, 99999) . $this->faker->freeEmail;
+        return 'u' . microtime(true) . $this->fakerData['emails'][$seed]; 
     }
 }
