@@ -9,6 +9,14 @@ return array(
 	// preloading 'log' component
 	'preload'=>array('log'),
 
+	'import'=>array(
+		'application.models.*',
+		'application.components.*',
+		'application.vendor.iachilles.eavactiverecord.*',
+		'application.vendor.iachilles.eavactiverecord.datatypes.*',
+		'application.vendor.iachilles.eavactiverecord.helpers.*',
+	),
+
 	// application components
 	'components'=>array(
 
