@@ -40,6 +40,7 @@ class FakerCommand extends CConsoleCommand
 
     public function actionAd($cnt=1000, $eav=false, $photos=false)
     {
+        echo date('H:i:s') . "\n";
         $insertCount = intval(floor($cnt/self::PER_INSERT));
         $txn = Yii::app()->db->beginTransaction();
         for ($i=0; $i < $insertCount; $i++) {
@@ -55,12 +56,29 @@ class FakerCommand extends CConsoleCommand
             $this->insertAd($eav, $photos, $remainder);
         }
         $txn->commit();
+        echo date('H:i:s') . "\n";
     }
 
     private function multipleInsert($table, $data)
     {
         $command = $this->builder->createMultipleInsertCommand($table, $data);
         $command->execute();
+    }
+
+    private function myMultipleInsert($table, $data)
+    {
+        $sql = "INSERT INTO {$table} (eav_attribute_id, entity_id, entity, value) VALUES ";
+        $i = 0;
+        foreach ($data as $row) {
+            if ($i == 0) {
+                $sql .=
+                "('{$row['eav_attribute_id']}','{$row['entity_id']}', 'ad', '{$row['value']}')";
+            } else {
+                $sql .= 
+                ",('{$row['eav_attribute_id']}','{$row['entity_id']}', 'ad', '{$row['value']}')";
+            }
+            $i++;
+        }
     }
 
     private function insertAd($eav, $photos, $cnt = self::PER_INSERT)
@@ -107,23 +125,33 @@ class FakerCommand extends CConsoleCommand
     private function attachEav($eav, $cnt = self::PER_INSERT)
     {
         if (!$eav) return;
+        $data = $this->collectEavData($cnt);
+        if (!empty($data['int'])) {
+            $this->myMultipleInsert('eav_attribute_int', $data['int']);
+        }
+        if (!empty($data['varchar'])) {
+            $this->myMultipleInsert('eav_attribute_varchar', $data['varchar']);
+        }
+    }
+
+    private function collectEavData($cnt)
+    {
         $ads = $this->getAdsCommand($cnt)->queryAll();
-        $dataInt = $dataVarchar = array();
         foreach ($ads as $ad) {
             $set = $this->fakerData->getSet($ad['eav_set_id']);
-            foreach ($set->eavAttribute as $a) {
-                if ($a->data_type == 'IntDataType') {
-                    $value = $this->getEavIntValue($a);
-                    $dataInt[] = array(
-                        'eav_attribute_id' => $a->id,
+            foreach ($set as $attr) {
+                if ($attr['data_type'] == 'IntDataType') {
+                    $value = $this->getEavIntValue($attr);
+                    $data['int'][] = array(
+                        'eav_attribute_id' => $attr['eav_attribute_id'],
                         'entity_id' => $ad['id'],
                         'entity' => 'ad',
                         'value' => $value,
                     );
-                } elseif ($a->data_type == 'VarcharDataType') {
-                    $value = $this->getEavVarcharValue($a);
-                    $dataVarchar[] = array(
-                        'eav_attribute_id' => $a->id,
+                } elseif ($attr['data_type'] == 'VarcharDataType') {
+                    $value = $this->getEavVarcharValue($attr);
+                    $data['varchar'][] = array(
+                        'eav_attribute_id' => $attr['eav_attribute_id'],
                         'entity_id' => $ad['id'],
                         'entity' => 'ad',
                         'value' => $value,
@@ -131,12 +159,7 @@ class FakerCommand extends CConsoleCommand
                 }
             }
         }
-        if ($dataInt) {
-            $this->multipleInsert('eav_attribute_int', $dataInt);
-        }
-        if ($dataVarchar) {
-            $this->multipleInsert('eav_attribute_varchar', $dataVarchar);
-        }
+        return $data;
     }
 
     private function attachPhoto($photos)
@@ -146,15 +169,16 @@ class FakerCommand extends CConsoleCommand
 
     private function getEavIntValue($attr)
     {
+        $rawData = unserialize($attr['data']);
         $min = (isset($rawData['rules']['numerical']['min']))
                 ? intval($rawData['rules']['numerical']['min'])
                 : 0;
         $max = (isset($rawData['rules']['numerical']['max']))
                 ? intval($rawData['rules']['numerical']['max'])
                 : 100000000;
-        if ($attr->name == 'price') {
+        if ($attr['name'] == 'price') {
             $value = rand($min, intval($max/100));
-        } elseif ($attr->name == 'modelYear') {
+        } elseif ($attr['name'] == 'modelYear') {
             $max = intval(date('Y'));
             $value = rand($min, $max);
         } else {
@@ -165,7 +189,7 @@ class FakerCommand extends CConsoleCommand
 
     private function getEavVarcharValue($attr)
     {
-        $rawData = unserialize($attr->data);
+        $rawData = unserialize($attr['data']);
         return $rawData['values'][array_rand($rawData['values'])];
     }
 

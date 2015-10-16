@@ -30,18 +30,19 @@ class FakerData
             $this->photoNames[] = $this->faker->word;
         }
 
-        $sql = "SELECT id FROM user LIMIT 100";
+        $this->setAuthors();
+        $this->setCities();
+        $this->setCategories();
+        $sql = "SELECT id FROM eav_set";
         $command = Yii::app()->db->createCommand($sql);
-        $this->adAuthors = $command->queryColumn();
-        $sql = "SELECT city_id FROM city WHERE country_id = 3159";
+        $setsIds = $command->queryColumn();
+        $sql = "SELECT sa.eav_attribute_id, at.name, at.data_type, at.data
+                FROM eav_attribute_set sa
+                JOIN eav_attribute at ON sa.eav_attribute_id=at.id
+                WHERE sa.eav_set_id = :set_id";
         $command = Yii::app()->db->createCommand($sql);
-        $this->adCities = $command->queryColumn();
-        $sql = "SELECT id, set_id FROM category WHERE lft = rgt - 1";
-        $command = Yii::app()->db->createCommand($sql);
-        $this->adCategories = $command->queryAll();
-        $sets = EavSet::model()->with('eavAttribute')->findAll();
-        foreach ($sets as $s) {
-            $this->adSets[$s->id] = $s;
+        foreach ($setsIds as $set_id) {
+            $this->adSets[$set_id] = $command->queryAll(true, array(':set_id'=>$set_id));
         }
     }
 
@@ -88,5 +89,26 @@ class FakerData
     public function getEmail()
     {
         return 'u' . microtime(true) . rand(1000, 9999) . $this->userEmails[array_rand($this->userEmails)];
+    }
+
+    private function setAuthors()
+    {
+        $sql = "SELECT id FROM user LIMIT 100";
+        $command = Yii::app()->db->createCommand($sql);
+        $this->adAuthors = $command->queryColumn();
+    }
+
+    private function setCities()
+    {
+        $sql = "SELECT city_id FROM city WHERE country_id = 3159";
+        $command = Yii::app()->db->createCommand($sql);
+        $this->adCities = $command->queryColumn();
+    }
+
+    private function setCategories()
+    {
+        $sql = "SELECT id, set_id FROM category WHERE lft = rgt - 1";
+        $command = Yii::app()->db->createCommand($sql);
+        $this->adCategories = $command->queryAll();
     }
 }
