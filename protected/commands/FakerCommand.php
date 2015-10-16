@@ -79,6 +79,7 @@ class FakerCommand extends CConsoleCommand
             }
             $i++;
         }
+        Yii::app()->db->createCommand($sql)->execute();
     }
 
     private function insertAd($eav, $photos, $cnt = self::PER_INSERT)
