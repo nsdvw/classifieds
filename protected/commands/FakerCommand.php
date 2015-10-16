@@ -40,28 +40,19 @@ class FakerCommand extends CConsoleCommand
 
     public function actionAd($cnt=1000, $eav=false, $photos=false)
     {
-        $table = 'ad';
         $insertCount = intval(floor($cnt/self::PER_INSERT));
         $txn = Yii::app()->db->beginTransaction();
-        
         for ($i=0; $i < $insertCount; $i++) {
             $this->progressMsg($i * self::PER_INSERT, $cnt);
-            $data = $this->collectAdData();
-            $this->multipleInsert($table, $data);
-            $this->attachEav($eav);
-            $this->attachPhoto($photos);
+            $this->insertAd($eav, $photos);
             if ($i % self::PER_TRANSACTION == 0 and $i != 0) {
                 $txn->commit();
                 $txn = Yii::app()->db->beginTransaction();
             }
         }
-
         $remainder = $cnt % self::PER_INSERT;
         if ($remainder) {
-            $data = $this->collectAdData($remainder);
-            $this->multipleInsert($table, $data);
-            $this->attachEav($eav, $remainder);
-            $this->attachPhoto($photos);
+            $this->insertAd($eav, $photos, $remainder);
         }
         $txn->commit();
     }
@@ -70,6 +61,15 @@ class FakerCommand extends CConsoleCommand
     {
         $command = $this->builder->createMultipleInsertCommand($table, $data);
         $command->execute();
+    }
+
+    private function insertAd($eav, $photos, $cnt = self::PER_INSERT)
+    {
+        $table = 'ad';
+        $data = $this->collectAdData($cnt);
+        $this->multipleInsert($table, $data);
+        $this->attachEav($eav, $cnt);
+        $this->attachPhoto($photos);
     }
 
     private function collectUserData($cnt = self::PER_INSERT)
