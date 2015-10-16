@@ -5,13 +5,11 @@ class FakerCommand extends CConsoleCommand
     const PER_INSERT = 100; // how many rows should be inserted in one query
     const PER_TRANSACTION = 100; // how many queries should contain one transaction
 
-    private $faker;
     private $fakerData = array();
     private $builder;
 
     public function init()
     {
-        $this->faker = Faker\Factory::create('ru_RU');
         $this->fakerData = new FakerData(self::PER_INSERT);
         $this->builder = Yii::app()->db->getSchema()->getCommandBuilder();
     }
@@ -70,16 +68,25 @@ class FakerCommand extends CConsoleCommand
         $sql = "INSERT INTO {$table} (eav_attribute_id, entity_id, entity, value) VALUES ";
         $i = 0;
         foreach ($data as $row) {
-            if ($i == 0) {
+            /*if ($i == 0) {
                 $sql .=
                 "('{$row['eav_attribute_id']}','{$row['entity_id']}', 'ad', '{$row['value']}')";
             } else {
                 $sql .= 
                 ",('{$row['eav_attribute_id']}','{$row['entity_id']}', 'ad', '{$row['value']}')";
+            }*/
+            if ($i == 0) {
+                $sql .= "(:a{$i},:e{$i},'ad',:v{$i})";
+            } else {
+                $sql .= ",(:a{$i},:e{$i},'ad',:v{$i})";
             }
+            $params[":e{$i}"] = $row['entity_id'];
+            $params[":a{$i}"] = $row['eav_attribute_id'];
+            $params[":v{$i}"] = $row['value'];
             $i++;
         }
-        Yii::app()->db->createCommand($sql)->execute();
+        // Yii::app()->db->createCommand($sql)->execute();
+        Yii::app()->db->createCommand($sql)->execute($params);
     }
 
     private function insertAd($eav, $photos, $cnt = self::PER_INSERT)
