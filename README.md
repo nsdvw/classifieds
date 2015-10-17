@@ -24,10 +24,15 @@ $ git clone https://github.com/nsdvw/classifieds.git
 $ mysql -uuser -ppassword classifieds < protected/data/mysql.schema.sql
 ```
 
-1. To export current database dump for testing (not necessary, up to you):
+1. You can find test cities and categories db structure under classifieds.sql:
    ``` sh
 $ mysql -uuser -ppassword classifieds < protected/data/classifieds.sql
 ```
+
+1. To generate fake data for users and ads:
+   ``` sh
+$ protected/yiic faker user --cnt=100000
+$ protected/yiic faker ad --cnt=1000000 --eav --photos
 
 1. if there are some migrations, apply them by
 
@@ -54,3 +59,5 @@ http://twig.sensiolabs.org/
 https://github.com/yiiext/twig-renderer
 1. WideImage library
 http://wideimage.sourceforge.net/
+1. Faker library
+https://github.com/fzaninotto/Faker
