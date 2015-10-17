@@ -33,17 +33,7 @@ class FakerData
         $this->setAuthors();
         $this->setCities();
         $this->setCategories();
-        $sql = "SELECT id FROM eav_set";
-        $command = Yii::app()->db->createCommand($sql);
-        $setsIds = $command->queryColumn();
-        $sql = "SELECT sa.eav_attribute_id, at.name, at.data_type, at.data
-                FROM eav_attribute_set sa
-                JOIN eav_attribute at ON sa.eav_attribute_id=at.id
-                WHERE sa.eav_set_id = :set_id";
-        $command = Yii::app()->db->createCommand($sql);
-        foreach ($setsIds as $set_id) {
-            $this->adSets[$set_id] = $command->queryAll(true, array(':set_id'=>$set_id));
-        }
+        $this->setAdSets();
     }
 
     public function getSet($id)
@@ -74,6 +64,11 @@ class FakerData
     public function getCategory()
     {
         return $this->adCategories[array_rand($this->adCategories)];
+    }
+
+    public function getPhotoName()
+    {
+        return $this->photoNames[array_rand($this->photoNames)];
     }
 
     public function getUserName()
@@ -110,5 +105,20 @@ class FakerData
         $sql = "SELECT id, set_id FROM category WHERE lft = rgt - 1";
         $command = Yii::app()->db->createCommand($sql);
         $this->adCategories = $command->queryAll();
+    }
+
+    private function setAdSets()
+    {
+        $sql = "SELECT id FROM eav_set";
+        $command = Yii::app()->db->createCommand($sql);
+        $setsIds = $command->queryColumn();
+        $sql = "SELECT sa.eav_attribute_id, at.name, at.data_type, at.data
+                FROM eav_attribute_set sa
+                JOIN eav_attribute at ON sa.eav_attribute_id=at.id
+                WHERE sa.eav_set_id = :set_id";
+        $command = Yii::app()->db->createCommand($sql);
+        foreach ($setsIds as $set_id) {
+            $this->adSets[$set_id] = $command->queryAll(true, array(':set_id'=>$set_id));
+        }
     }
 }

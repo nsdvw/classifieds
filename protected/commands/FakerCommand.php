@@ -63,18 +63,11 @@ class FakerCommand extends CConsoleCommand
         $command->execute();
     }
 
-    private function myMultipleInsert($table, $data)
+    private function eavMultipleInsert($table, $data)
     {
         $sql = "INSERT INTO {$table} (eav_attribute_id, entity_id, entity, value) VALUES ";
         $i = 0;
         foreach ($data as $row) {
-            /*if ($i == 0) {
-                $sql .=
-                "('{$row['eav_attribute_id']}','{$row['entity_id']}', 'ad', '{$row['value']}')";
-            } else {
-                $sql .= 
-                ",('{$row['eav_attribute_id']}','{$row['entity_id']}', 'ad', '{$row['value']}')";
-            }*/
             if ($i == 0) {
                 $sql .= "(:a{$i},:e{$i},'ad',:v{$i})";
             } else {
@@ -85,7 +78,6 @@ class FakerCommand extends CConsoleCommand
             $params[":v{$i}"] = $row['value'];
             $i++;
         }
-        // Yii::app()->db->createCommand($sql)->execute();
         Yii::app()->db->createCommand($sql)->execute($params);
     }
 
@@ -95,7 +87,7 @@ class FakerCommand extends CConsoleCommand
         $data = $this->collectAdData($cnt);
         $this->multipleInsert($table, $data);
         $this->attachEav($eav, $cnt);
-        $this->attachPhoto($photos);
+        $this->attachPhoto($photos, $cnt);
     }
 
     private function collectUserData($cnt = self::PER_INSERT)
@@ -135,10 +127,10 @@ class FakerCommand extends CConsoleCommand
         if (!$eav) return;
         $data = $this->collectEavData($cnt);
         if (!empty($data['int'])) {
-            $this->myMultipleInsert('eav_attribute_int', $data['int']);
+            $this->eavMultipleInsert('eav_attribute_int', $data['int']);
         }
         if (!empty($data['varchar'])) {
-            $this->myMultipleInsert('eav_attribute_varchar', $data['varchar']);
+            $this->eavMultipleInsert('eav_attribute_varchar', $data['varchar']);
         }
     }
 
@@ -170,9 +162,27 @@ class FakerCommand extends CConsoleCommand
         return $data;
     }
 
-    private function attachPhoto($photos)
+    private function attachPhoto($photos, $cnt = self::PER_INSERT)
     {
-        return;
+        if (!$photos) return;
+        $data = $this->collectPhotoData($cnt);
+        $this->multipleInsert('photo', $data);
+    }
+
+    private function collectPhotoData($cnt)
+    {
+        $data = array();
+        $ads = $this->getAdsCommand($cnt)->queryAll();
+        foreach ($ads as $ad) {
+            $photoCount = rand(0, 5);
+            for ($i=0; $i < $photoCount; $i++) {
+                $data[] = array(
+                    'name' => $this->fakerData->getPhotoName(),
+                    'ad_id' => $ad['id'],
+                );
+            }
+        }
+        return $data;
     }
 
     private function getEavIntValue($attr)
