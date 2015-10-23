@@ -4,14 +4,18 @@ class FakerCommand extends CConsoleCommand
 {
     const PER_INSERT = 100; // how many rows should be inserted in one query
     const PER_TRANSACTION = 100; // how many queries should contain one transaction
+    const PASSWORD = 'demo';
+    const PUBLISHED = 'published';
 
     private $fakerData = array();
     private $builder;
+    private $password;
 
     public function init()
     {
         $this->fakerData = new FakerData(self::PER_INSERT);
         $this->builder = Yii::app()->db->getSchema()->getCommandBuilder();
+        $this->password = CPasswordHelper::hashPassword(self::PASSWORD);
     }
 
     public function actionUser($cnt = 1000)
@@ -97,7 +101,7 @@ class FakerCommand extends CConsoleCommand
             $data[] = array(
                 'email' => $this->fakerData->getEmail(),
                 // use 'demo' to login
-                'password' => '$2y$13$gT2xqTJiIdQjHXUvVIwePOgGINJQmX6m7wdAZefcw8lQasxtGOple',
+                'password' => $this->password,
                 'name' => $this->fakerData->getUserName(),
                 'phone' => $this->fakerData->getPhoneNumber(),
             );
@@ -117,6 +121,7 @@ class FakerCommand extends CConsoleCommand
                 'city_id' => $this->fakerData->getCity(),
                 'category_id' => $category['id'],
                 'eav_set_id' => $category['set_id'],
+                'status' => self::PUBLISHED,
             );
         }
         return $data;
