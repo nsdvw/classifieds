@@ -18,29 +18,28 @@ $ git clone https://github.com/nsdvw/classifieds.git
 
 1. composer install
 
-1. To create database schema you need:
+1. To change dbname or other connection settings, modify the protected/config/database.php as usual in Yii 1.1.
 
+1. To create database schema you need:
    ``` sh
-$ mysql -uuser -ppassword classifieds < protected/data/mysql.schema.sql
+$ mysql -uuser -ppassword your_dbname < protected/data/mysql.schema.sql
+```
+
+1. If there are any migrations in folder protected/migrations, apply them by
+   ``` sh
+$ protected/yiic migrate
 ```
 
 1. You can find test cities and categories db structure under classifieds.sql:
    ``` sh
-$ mysql -uuser -ppassword classifieds < protected/data/classifieds.sql
+$ mysql -uuser -ppassword your_dbname < protected/data/classifieds.sql
 ```
 
 1. To generate fake data for users and ads:
    ``` sh
 $ protected/yiic faker user --cnt=100000
 $ protected/yiic faker ad --cnt=1000000 --eav --photos
-
-1. if there are some migrations, apply them by
-
-   ``` sh
-$ protected/yiic migrate
 ```
-
-1. To change dbname or other connection settings, modify the protected/config/database.php as usual in Yii 1.1.
 
 1. Sphinx configuration is under protected/config/main.php in "params" section.
 If you do not use sphinx, comment the configuration, or leave it as is (exception will be caught and use "like" query instead of sphinx).
