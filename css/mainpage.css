@@ -10,6 +10,14 @@
     padding: 6px 10px;
     box-sizing: border-box;
 }
+.root span {
+    text-decoration: underline;
+    color: #06c;
+}
+.root span:hover {
+    color: #09f;
+    cursor: pointer;
+}
 .children {
     border-top: 1px solid #ccc;
     padding: 15px 0 30px;

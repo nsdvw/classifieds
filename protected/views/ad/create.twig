@@ -34,9 +34,9 @@
 </div>
 {% for key in model.eavAttributes|keys %}
     {% if model.getEavVariants(key) %} 
-        {% include 'views/eav/dropDown.twig' ignore missing %}
+        {% include 'views/eav/dropDown.twig' %}
     {% else %}
-        {% include 'views/eav/textInput.twig' ignore missing %}
+        {% include 'views/eav/textInput.twig' %}
     {% endif %}
 {% endfor %}
 

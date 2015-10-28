@@ -8,9 +8,6 @@
 {{ Yii.void(App.clientScript.registerScriptFile(
     App.request.baseUrl~'/js/citiesDropDown.js', constant('CClientScript::POS_END'))) }}
 
-
-<h1>Welcome to <i>{{ App.name }}</i></h1>
-
 <div class="form">
 {{ C.Html.beginForm(App.createUrl('site/search'), 'get') }}
     {{ C.Html.activeTextField(model, 'word', {'name':'word', 'placeholder':'поиск по фразе'}) }}
@@ -26,9 +23,10 @@
 {% for category in categories %}
     {% if category.level == 1 %}
     <div class="root root-{{category.root}}">
-        <a href="{{ App.request.baseUrl~'/site/search/'~category.id }}">
+        {# <a href="{{ App.request.baseUrl~'/site/search/'~category.id }}">
         {{ category.title }}
-        </a>
+        </a> #}
+        <span>{{ category.title }}</span>
     </div>
     {% endif %}
 {% endfor %}

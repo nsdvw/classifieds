@@ -28,11 +28,10 @@
 	<div id="mainmenu">
 		{{ this.widget('zii.widgets.CMenu', {
 			'items': [
-				{'label':'Home', 'url':['/site/index']},
-				{'label':'About', 'url':{0:'/site/page', 'view':'about'}},
-				{'label':'Contact', 'url':['/site/contact']},
-				{'label':'Login', 'url':['/site/login'], 'visible': App.user.isGuest},
-				{'label':'Logout ('~App.user.name~')', 'url':['/site/logout'], 'visible':not App.user.isGuest }
+				{'label':'На главную', 'url':['/site/index']},
+				{'label':'Дать объявление', 'url':['/ad/new'], 'visible':not App.user.isGuest},
+				{'label':'Вход', 'url':['/site/login'], 'visible': App.user.isGuest},
+				{'label':'Выйти', 'url':['/site/logout'], 'visible':not App.user.isGuest }
 			]
 		}, true) }}
 	</div><!-- mainmenu -->
