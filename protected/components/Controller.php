@@ -20,4 +20,24 @@ class Controller extends CController
 	 * for more details on how to specify this property.
 	 */
 	public $breadcrumbs=array();
+
+	/**
+	 * Search via sphinx (mysql client)
+	 */
+	protected function sphinxSearch($phrase)
+	{
+		$connection = new CDbConnection(
+			Yii::app()->params['sphinx']['dsn'],
+			Yii::app()->params['sphinx']['user'],
+			Yii::app()->params['sphinx']['pass']
+		);
+		$connection->active=true;
+		$words = mb_split('[^\w]+', $phrase);
+		$words = array_filter($words); // unset empty elements
+		$search = implode('|', $words);
+		$sphinxIndexes = SphinxService::implodeIndexes();
+		$sql = "SELECT * FROM $sphinxIndexes WHERE MATCH('$search') LIMIT 10000";
+		$command = $connection->createCommand($sql);
+		return $command->queryColumn();
+	}
 }

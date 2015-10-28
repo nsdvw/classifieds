@@ -33,9 +33,9 @@ class SiteController extends Controller
 				'actions'=>array('logout'),
 				'users'=>array('@'),
 			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+			array('deny',
 				'actions'=>array('admin'),
-				'users'=>array('admin'),
+				'users'=>array('*'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -56,7 +56,7 @@ class SiteController extends Controller
 		$model = new SearchForm;
 		$dp = new CActiveDataProvider('Ad', array(
 			'criteria'=>array(
-				'condition'=>'status="unpublished"',
+				'condition'=>'status="published"',
 				'order'=>'added DESC',
 				'with'=>array('author', 'category', 'city', 'photos'),
 				'limit'=>20,
@@ -70,12 +70,12 @@ class SiteController extends Controller
 	}
 
 	/**
-	 * Action to search ads by key word(s?)
+	 * Action to search ads by key words
 	 */
 	public function actionSearch($id=null,$word=null,$city_id=null,$page=null)
 	{
 		$criteria = new CDbCriteria;
-		$criteria->condition = "status='unpublished'";
+		$criteria->condition = "status='published'";
 		$criteria->order = 'added DESC';
 
 		$form = new EavSearchForm();
@@ -97,10 +97,12 @@ class SiteController extends Controller
 		}
 		if ($word) {
 			try {
-				$reader = $this->sphinxSearch($word);
+				$ids = $this->sphinxSearch($word);
+				$criteria->addInCondition('t.id', $ids);
 			} catch(Exception $e) {
-				$criteria->addCondition('title LIKE :word OR description LIKE :word');
-				$criteria->params[':word'] = "%{$word}%";
+				$criteria->addCondition('title LIKE :word1 OR description LIKE :word2');
+				$criteria->params[':word1'] = "%{$word}%";
+				$criteria->params[':word2'] = "%{$word}%";
 			}
 		}
 		if ($city_id) {
@@ -137,32 +139,6 @@ class SiteController extends Controller
 			else
 				$this->render('error', $error);
 		}
-	}
-
-	/**
-	 * Displays the contact page
-	 */
-	public function actionContact()
-	{
-		$model=new ContactForm;
-		if(isset($_POST['ContactForm']))
-		{
-			$model->attributes=$_POST['ContactForm'];
-			if($model->validate())
-			{
-				$name='=?UTF-8?B?'.base64_encode($model->name).'?=';
-				$subject='=?UTF-8?B?'.base64_encode($model->subject).'?=';
-				$headers="From: $name <{$model->email}>\r\n".
-					"Reply-To: {$model->email}\r\n".
-					"MIME-Version: 1.0\r\n".
-					"Content-Type: text/plain; charset=UTF-8";
-
-				mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);
-				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
-				$this->refresh();
-			}
-		}
-		$this->render('contact',array('model'=>$model));
 	}
 
 	/**
@@ -234,26 +210,5 @@ class SiteController extends Controller
 				$criteria->params[":{$key}"] = $value;
 			}
 		}
-	}
-
-	/**
-	 * Search via sphinx (mysql client)
-	 */
-	private function sphinxSearch($phrase)
-	{
-		$connection = new CDbConnection(
-			Yii::app()->params['sphinx']['dsn'],
-			Yii::app()->params['sphinx']['user'],
-			Yii::app()->params['sphinx']['pass']
-		);
-		$connection->active=true;
-		$words = mb_split('[^\w]+', $phrase);
-		$words = array_filter($words); // unset empty elements
-		$search = implode('|', $words);
-		$sphinxIndexes = Yii::app()->params['sphinx']['indexes'];
-		$sphinxIndexes = implode(',', $sphinxIndexes);
-		$sql = "SELECT * FROM $sphinxIndexes WHERE MATCH('$search')";
-		$command = $connection->createCommand($sql);
-		return $command->query();
 	}
 }

@@ -121,6 +121,7 @@ class AdController extends Controller
 					}
 				} else {
 					$transaction->commit();
+					SphinxService::saveAdToRt($model->id);
 					$this->redirect(array('view','id'=>$model->id));
 				}
 			}
