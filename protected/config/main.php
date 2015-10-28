@@ -7,7 +7,7 @@
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'Classifieds',
+	'name'=>'Доска объявлений',
 	'language'=>'ru',
 
 	// preloading 'log' component
@@ -99,10 +99,10 @@ return array(
 		// configure to match your sphinx configuration,
 		// or comment to disable sphinxsearch
 		'sphinx'=>array(
-			'dsn'=>'mysql:host=127.0.0.1;dbname=classifieds;port=9306',
+			'dsn'=>'mysql:host=127.0.0.1;port=9306',
 			'user'=>'root',
 			'pass'=>'',
-			'indexes'=>array('rt_classifieds', 'index_classifieds'),
+			'indexes'=>array('rt'=>['rt_ad'], 'disc'=>['ix_ad']),
 		),
 	),
 );
