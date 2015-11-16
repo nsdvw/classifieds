@@ -49,7 +49,14 @@ return array(
 		),
 
 		'eavCache' => array(
-			'class' => 'system.caching.CDummyCache'
+			'class' => 'system.caching.CRedisCache'
+		),
+
+		'cache' => array(
+			'class' => 'system.caching.CRedisCache',
+			'hostname' => '127.0.0.1',
+			'port' => 6379,
+			'database' => 0,
 		),
 
 		// uncomment the following to enable URLs in path-format
@@ -67,6 +74,11 @@ return array(
 
 		// database settings are configured in database.php
 		'db'=>require(dirname(__FILE__).'/database.php'),
+
+		'authManager'=>array(
+            'class'=>'CDbAuthManager',
+            'connectionID'=>'db',
+        ),
 
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
