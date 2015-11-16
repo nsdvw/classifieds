@@ -21,15 +21,20 @@ class SiteController extends Controller
 		);
 	}
 
+	public function filters()
+	{
+		return array('accessControl');
+	}
+
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
+			array('allow',
 				'actions'=>array('index','view','search', 'error', 'contact',
-					'login', 'logout', 'cityData'),
+					'login', 'logout', 'cityData', 'getcities'),
 				'users'=>array('*'),
 			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+			array('allow',
 				'actions'=>array('logout'),
 				'users'=>array('@'),
 			),
@@ -49,6 +54,8 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
+		Yii::app()->db->schemaCachingDuration = 900;
+
 		$criteria = new CDbCriteria;
 		$criteria->addInCondition('level', array(1,2));
 		$criteria->order = 'root, lft';
