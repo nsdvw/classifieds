@@ -3,7 +3,6 @@
 {% block title %}{{ App.name }} : главная{% endblock title %}
 
 {% block content %}
-
 {{ Yii.void(App.clientScript.registerCssFile(App.request.baseUrl~'/css/mainpage.css')) }}
 {{ Yii.void(App.clientScript.registerScriptFile(
     App.request.baseUrl~'/js/citiesDropDown.js', constant('CClientScript::POS_END'))) }}
@@ -11,52 +10,58 @@
 <div class="form">
 {{ C.Html.beginForm(App.createUrl('site/search'), 'get') }}
     {{ C.Html.activeTextField(model, 'word', {'name':'word', 'placeholder':'поиск по фразе'}) }}
-    {{ C.Html.activeDropDownList(model, 'region_id', model.getRegions(),
+    {% if this.beginCache('dropDownRegion', {'duration': 3600}) %}
+        {{ C.Html.activeDropDownList(model, 'region_id', model.getRegions(),
         {'id':'id_region', 'prompt':'область', 'name':'region'}) }}
+        {{ Yii.void(this.endCache()) }}
+    {% endif %}
     {{ C.Html.activeDropDownList(model, 'city_id',
         {}, {'id':'id_city', 'prompt':'город', 'name':'city'}) }}
     {{ C.Html.submitButton('', {'name':'', 'value':'Найти'}) }}
 {{ C.Html.endForm() }}
 </div>
 
-<div class="roots">
-{% for category in categories %}
-    {% if category.level == 1 %}
-    <div class="root root-{{category.root}}">
-        {# <a href="{{ App.request.baseUrl~'/site/search/'~category.id }}">
-        {{ category.title }}
-        </a> #}
-        <span>{{ category.title }}</span>
-    </div>
-    {% endif %}
-{% endfor %}
-<div class="clear"></div>
-</div>
-
-{% for i in 1..10 %}
-<div class="children root-{{i}}">
+{% if this.beginCache('roots', {'duration': 3600}) %}
+    <div class="roots">
     {% for category in categories %}
-        {% if category.level != 1 and category.root == i %}
-        <div class="child">
-            <a href="{{ App.request.baseUrl~'/site/search/'~category.id }}">
-                {{ category.title }}
-            </a>
+        {% if category.level == 1 %}
+        <div class="root root-{{category.root}}">
+            <span>{{ category.title }}</span>
         </div>
         {% endif %}
     {% endfor %}
     <div class="clear"></div>
-</div>
-{% endfor %}
+    </div>
 
-<h2>Новые объявления</h2>
-<div class="clistview">
-{{ this.widget('zii.widgets.CListView', {
-    'dataProvider':dataProvider,
-    'itemView':'_new',
-    'summaryText':false
-}, true) }}
-<div class="clear"></div>
-</div>
+    {% for i in 1..10 %}
+    <div class="children root-{{i}}">
+        {% for category in categories %}
+            {% if category.level != 1 and category.root == i %}
+            <div class="child">
+                <a href="{{ App.request.baseUrl~'/site/search/'~category.id }}">
+                    {{ category.title }}
+                </a>
+            </div>
+            {% endif %}
+        {% endfor %}
+        <div class="clear"></div>
+    </div>
+    {% endfor %}
+    {{ Yii.void(this.endCache()) }}
+{% endif %}
+
+{% if this.beginCache('_new', {'duration': 5}) %}
+    <h2>Новые объявления</h2>
+    <div class="clistview">
+    {{ this.widget('zii.widgets.CListView', {
+        'dataProvider':dataProvider,
+        'itemView':'_new',
+        'summaryText':false
+    }, true) }}
+    <div class="clear"></div>
+    </div>
+    {{ Yii.void(this.endCache()) }}
+{% endif %}
 
 <script>
     $(".roots").click(function(event){
