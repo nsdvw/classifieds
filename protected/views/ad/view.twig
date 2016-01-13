@@ -8,7 +8,13 @@
         <div class="ad-city">Город: {{ model.city.name }}</div>
         <div class="clear"></div>
     </div>
+    {% for attrName, attrValue in model.getEavAttributes() %}
+        <div style="color:green">
+            {{ attrName }} ({{ model.getAttributeLabel(attrName) }}):{{ attrValue }}
+        </div>
+    {% endfor %}
     <div class="ad-description">Содержимое: {{ model.description }}</div>
+    <div>{{ model.getAttributeLabel('price') }}{{ model.price }}</div>
     <div class="ad-added">Добавлено: {{ model.added }}</div>
     <div class="ad-images">
         {% for photo in model.photos %}
