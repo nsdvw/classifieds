@@ -58,19 +58,28 @@ class SiteController extends Controller
         $criteria->addInCondition('level', array(1,2));
         $criteria->order = 'root, lft';
         $categories = Category::model()->findAll($criteria);
-        $model = new SearchForm;
-        $dp = new CActiveDataProvider('Ad', array(
-            'criteria'=>array(
-                'condition'=>'status="published"',
-                'order'=>'added DESC',
-                'with'=>array('author', 'category', 'city', 'photos'),
-                'limit'=>20,
-            ),
-            'pagination'=>false
+        $form = new SearchForm;
+        $criteria = new CDbCriteria(array(
+            'condition' => 'status="published"',
+            'order' => 'added DESC',
+            'with' => array('author', 'category', 'city', 'photos'),
+            'limit' => 20,
         ));
+        $models = Ad::model()->withEavAttributes()->findAll($criteria);
+        $dp = new CActiveDataProvider('Ad', array(
+            'data' => $models,
+            'pagination' => false
+        ));
+        $regionList = Region::model()->getRegionList();
 
-        $this->render('index',
-            array('categories'=>$categories, 'model'=>$model, 'dataProvider'=>$dp)
+        $this->render(
+            'index',
+            array(
+                'categories' => $categories,
+                'form' => $form,
+                'dataProvider' => $dp,
+                'regionList' => $regionList,
+            )
         );
     }
 
