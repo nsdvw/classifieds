@@ -42,10 +42,10 @@
   },
   "scripts": {
     "post-install-cmd": [
-      "bash scripts/post-update-cmd.sh"
+      "bash commands/shell/post-update-cmd.sh"
     ],
     "post-update-cmd": [
-      "bash scripts/post-update-cmd.sh"
+      "bash commands/shell/post-update-cmd.sh"
     ]
   }
 }
