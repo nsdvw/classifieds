@@ -1,37 +1,51 @@
 {
-  "repositories":[
-  {
-      "type":"package",
-      "package":{
-          "name":"yiiext/twig-renderer",
-          "version":"1.1.15",
-          "source":{
-              "type":"git",
-              "url":"https://github.com/yiiext/twig-renderer",
-              "reference":"v1.1.15"
-          }
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/nsdvw/PreviewGenerator"
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "yiiext/twig-renderer",
+        "version": "1.1.15",
+        "source": {
+          "type": "git",
+          "url": "https://github.com/yiiext/twig-renderer",
+          "reference": "v1.1.15"
+        }
       }
-  },
-  {
-    "type": "package",
-    "package": {
-      "name":"Joblo/cascadedropdown",
-      "version":"1.0",
-      "dist": {
-        "url":"http://www.yiiframework.com/extension/cascadedropdown/files/cascadedropdown.1.0.zip",
-        "type":"zip"
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "Joblo/cascadedropdown",
+        "version": "1.0",
+        "dist": {
+          "url": "http://www.yiiframework.com/extension/cascadedropdown/files/cascadedropdown.1.0.zip",
+          "type": "zip"
+        }
       }
     }
-  }
   ],
-  "require":{
-      "php":">=5.3.0",
-      "yiisoft/yii": "dev-master",
-      "twig/twig": "1.*",
-      "yiiext/twig-renderer":"1.1.*",
-      "yiiext/nested-set-behavior": "dev-master",
-      "iachilles/eavactiverecord": "dev-master",
-      "smottt/wideimage":"dev-master",
-    "fzaninotto/faker": "^1.5"
+  "require": {
+    "php": ">=5.3.0",
+    "yiisoft/yii": "dev-master",
+    "twig/twig": "1.*",
+    "yiiext/twig-renderer": "1.1.*",
+    "yiiext/nested-set-behavior": "dev-master",
+    "iachilles/eavactiverecord": "dev-master",
+    "smottt/wideimage": "~1.1",
+    "fzaninotto/faker": "^1.5",
+    "nsdvw/PreviewGenerator": "dev-master",
+    "twbs/bootstrap": "^3.3"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "bash scripts/post-update-cmd.sh"
+    ],
+    "post-update-cmd": [
+      "bash scripts/post-update-cmd.sh"
+    ]
   }
 }

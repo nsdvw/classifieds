@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6214470862e34266975a7f8f88221ab9",
-    "content-hash": "fd82ac7db790566d35cff332c768b7ef",
+    "hash": "a98b5ab217941a3fd58d65766ce1d858",
+    "content-hash": "06a8a9a4d66fce28884388d670f014f2",
     "packages": [
         {
             "name": "fzaninotto/faker",
@@ -99,18 +99,47 @@
             "time": "2014-11-19 11:27:20"
         },
         {
-            "name": "smottt/wideimage",
+            "name": "nsdvw/PreviewGenerator",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/smottt/WideImage.git",
-                "reference": "669f63f1452c7fc70120fff4bc457727714a0834"
+                "url": "https://github.com/nsdvw/PreviewGenerator.git",
+                "reference": "d9d83200092c03a6de1cbf709be600c3bae50520"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smottt/WideImage/zipball/56803f947bfdbe147fd5eb3607fd3450d4a224fc",
-                "reference": "669f63f1452c7fc70120fff4bc457727714a0834",
+                "url": "https://api.github.com/repos/nsdvw/PreviewGenerator/zipball/d9d83200092c03a6de1cbf709be600c3bae50520",
+                "reference": "d9d83200092c03a6de1cbf709be600c3bae50520",
                 "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PreviewGenerator\\": "lib/"
+                }
+            },
+            "support": {
+                "source": "https://github.com/nsdvw/PreviewGenerator/tree/master",
+                "issues": "https://github.com/nsdvw/PreviewGenerator/issues"
+            },
+            "time": "2016-01-19 02:52:09"
+        },
+        {
+            "name": "smottt/wideimage",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/smottt/WideImage.git",
+                "reference": "6cbdaa6eb186c4a618b2ef5a7f38fcb50f0f2b1b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/smottt/WideImage/zipball/6cbdaa6eb186c4a618b2ef5a7f38fcb50f0f2b1b",
+                "reference": "6cbdaa6eb186c4a618b2ef5a7f38fcb50f0f2b1b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
             },
             "type": "library",
             "autoload": {
@@ -125,20 +154,71 @@
             ],
             "description": "An open-source PHP library for image manipulation. (With namespaces, PHP 5.3+)",
             "homepage": "http://wideimage.sourceforge.net",
-            "time": "2015-05-27 09:42:22"
+            "time": "2015-10-05 20:32:34"
         },
         {
-            "name": "twig/twig",
-            "version": "v1.22.1",
+            "name": "twbs/bootstrap",
+            "version": "v3.3.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twigphp/Twig.git",
-                "reference": "b7fc2469fa009897871fb95b68237286fc54a5ad"
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "81df608a40bf0629a1dc08e584849bb1e43e0b7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b7fc2469fa009897871fb95b68237286fc54a5ad",
-                "reference": "b7fc2469fa009897871fb95b68237286fc54a5ad",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/81df608a40bf0629a1dc08e584849bb1e43e0b7a",
+                "reference": "81df608a40bf0629a1dc08e584849bb1e43e0b7a",
+                "shasum": ""
+            },
+            "replace": {
+                "twitter/bootstrap": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
+                },
+                {
+                    "name": "Mark Otto",
+                    "email": "markdotto@gmail.com"
+                }
+            ],
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+            "homepage": "http://getbootstrap.com",
+            "keywords": [
+                "JS",
+                "css",
+                "framework",
+                "front-end",
+                "less",
+                "mobile-first",
+                "responsive",
+                "web"
+            ],
+            "time": "2015-11-24 19:37:05"
+        },
+        {
+            "name": "twig/twig",
+            "version": "v1.23.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/Twig.git",
+                "reference": "ae53fc2c312fdee63773b75cb570304f85388b08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/ae53fc2c312fdee63773b75cb570304f85388b08",
+                "reference": "ae53fc2c312fdee63773b75cb570304f85388b08",
                 "shasum": ""
             },
             "require": {
@@ -151,7 +231,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.22-dev"
+                    "dev-master": "1.23-dev"
                 }
             },
             "autoload": {
@@ -186,7 +266,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-09-15 06:50:16"
+            "time": "2016-01-11 14:02:19"
         },
         {
             "name": "yiiext/nested-set-behavior",
@@ -246,12 +326,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii.git",
-                "reference": "eda86c729658b0d2b652b0a261899507af3d9159"
+                "reference": "57d4b9775fbe36f968a2d94d92ef8d804599f9be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii/zipball/67a2a0e313586f8dcd5628f22d655db592058395",
-                "reference": "eda86c729658b0d2b652b0a261899507af3d9159",
+                "url": "https://api.github.com/repos/yiisoft/yii/zipball/57d4b9775fbe36f968a2d94d92ef8d804599f9be",
+                "reference": "57d4b9775fbe36f968a2d94d92ef8d804599f9be",
                 "shasum": ""
             },
             "require": {
@@ -328,7 +408,7 @@
                 "framework",
                 "yii"
             ],
-            "time": "2015-06-02 20:16:15"
+            "time": "2016-01-15 11:43:35"
         }
     ],
     "packages-dev": [],
@@ -338,7 +418,7 @@
         "yiisoft/yii": 20,
         "yiiext/nested-set-behavior": 20,
         "iachilles/eavactiverecord": 20,
-        "smottt/wideimage": 20
+        "nsdvw/previewgenerator": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
