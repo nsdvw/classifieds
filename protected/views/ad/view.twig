@@ -1,4 +1,4 @@
-{% extends 'views/layouts/main.twig' %}
+{% extends 'views/layouts/main_old.twig' %}
 
 {% block content %}
     {{ Yii.void(App.clientScript.registerCssFile(App.request.baseUrl~'/css/adview.css')) }}
@@ -14,7 +14,11 @@
         </div>
     {% endfor %}
     <div class="ad-description">Содержимое: {{ model.description }}</div>
-    <div>{{ model.getAttributeLabel('price') }}{{ model.price }}</div>
+    <div>{{ model.getAttributeLabel('price') }}
+      {% if (model.isEavAttributeEmpty('price')) %} 0
+      {% else %} {{ model.price }}
+      {% endif %}
+    </div>
     <div class="ad-added">Добавлено: {{ model.added }}</div>
     <div class="ad-images">
         {% for photo in model.photos %}
