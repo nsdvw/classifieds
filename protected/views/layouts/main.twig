@@ -1,54 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
+
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="language" content="en">
-
-	<!-- blueprint CSS framework -->
-	<link rel="stylesheet" type="text/css" href="{{App.request.baseUrl}}/css/screen.css" media="screen, projection">
-	<link rel="stylesheet" type="text/css" href="{{App.request.baseUrl}}/css/print.css" media="print">
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" type="text/css" href="{{App.request.baseUrl}}/css/ie.css" media="screen, projection">
-	<![endif]-->
-
-	<link rel="stylesheet" type="text/css" href="{{App.request.baseUrl}}/css/main.css">
-	<link rel="stylesheet" type="text/css" href="{{App.request.baseUrl}}/css/form.css">
-	{% block auxres %}{% endblock auxres %}
-	<title>{% block title %}{{ this.pageTitle }}{% endblock title %}</title>
+  <meta charset="UTF-8">
+  <title>{% block title %}{{ this.pageTitle }}{% endblock title %}</title>
+  <link rel="stylesheet" href="/vendor-css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/navbar.css"/>
+  {{ Yii.void(Yii.clientScript.registerCoreScript('jquery')) }}
+  <script src="/vendor-js/bootstrap.min.js"></script>
+  {% block auxres %}{% endblock auxres %}
 </head>
 
 <body>
 
-<div class="container" id="page">
+<div class="container-fluid nopaddings">
+  <div class="main-menu">
+    <div class="center-block col-sm-12 col-md-10 col-lg-9 nofloat">
+      <nav class="navbar navbar-default">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed"
+                  data-toggle="collapse" data-target="#navbar-collapse-1"
+                  aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Доска объявлений</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+          {{ this.widget('zii.widgets.CMenu', {
+            'htmlOptions': {
+              'class': 'nav navbar-nav navbar-right'
+            },
+            'items': [
+            {'label':'Дать объявление', 'url':['/ad/new'], 'visible':not App.user.isGuest},
+            {'label':'Вход', 'url':['/site/login'], 'visible': App.user.isGuest},
+            {'label':'Выйти', 'url':['/site/logout'], 'visible':not App.user.isGuest }
+            ]
+          }, true) }}
+        </div>
+      </nav>
+    </div>
+  </div><!-- end of main-menu -->
 
-	<div id="header">
-		<div id="logo">{{ App.name }}</div>
-	</div><!-- header -->
+  <div class="content">
+    <div class="center-block col-sm-12 col-md-10 col-lg-9 nofloat">
+      {% block content %}{% endblock content %}
+    </div>
+  </div>
 
-	<div id="mainmenu">
-		{{ this.widget('zii.widgets.CMenu', {
-			'items': [
-				{'label':'На главную', 'url':['/site/index']},
-				{'label':'Дать объявление', 'url':['/ad/new'], 'visible':not App.user.isGuest},
-				{'label':'Вход', 'url':['/site/login'], 'visible': App.user.isGuest},
-				{'label':'Выйти', 'url':['/site/logout'], 'visible':not App.user.isGuest }
-			]
-		}, true) }}
-	</div><!-- mainmenu -->
-	<div id="content">
-		{% block content %} {{ content }} {% endblock content %}
-	</div>
-	<div class="clear"></div>
-
-	<div id="footer">
-		Copyright &copy;
-		{{ "now"|date('Y', timezone="Europe/Kiev") }}
-		by My Company.<br>
-		All Rights Reserved.<br>
-		{{ Yii.powered() }}
-	</div><!-- footer -->
-
-</div><!-- page -->
+  <footer class="footer">
+    <div class="center-block col-sm-12 col-md-10 col-lg-9 text-muted
+                nofloat footer-content">
+      Classifieds 2016 &copy; All rights reserved<br>
+      {{ Yii.powered() }}
+    </div>
+  </footer>
+</div><!-- endof container -->
 
 </body>
 </html>

@@ -1,28 +1,57 @@
-.roots {
+.nofloat {
+    float: none;
+}
+.nopaddings {
+    padding: 0;
+}
+.main-menu {
+    padding-top: 15px;
+}
+.footer-content {
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #e7e7e7;
+}
+.content {
+    margin-bottom: 30px;
+}
+.form-inline .form-control {
+    width: 100%;
+}
+input, select {
+    margin-bottom: 5px;
+}
+.roots h3 {
     font-size: 1.25em;
     font-weight: bold;
+    margin: 10px 0;
+}
+.roots {
     padding: 15px 0 20px;
 }
-.root,
 .child {
-    float: left;
-    width: 33%;
-    padding: 6px 10px;
-    box-sizing: border-box;
-}
-.root span {
-    text-decoration: underline;
-    color: #06c;
-}
-.root span:hover {
-    color: #09f;
-    cursor: pointer;
+    margin: 5px 0;
 }
 .children {
     border-top: 1px solid #ccc;
-    padding: 15px 0 30px;
+    padding: 15px 0;
     display: none;
 }
+/*************************************/
+.new-ads h3 {
+    font-size: 1em;
+    margin: 10px 0 2px;
+}
+.new-ads h4 {
+    margin: 5px 0 0;
+}
+.preview {
+    width: 172px;
+    float: left;
+    margin: 8px;
+}
+
+/*
 .new-ad {
     border: 1px solid #ccc;
     margin: 10px 5px;
@@ -44,4 +73,4 @@
 }
 .thumb-small {
     vertical-align: middle;
-}
+}*/

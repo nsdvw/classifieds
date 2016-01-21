@@ -1,78 +1,109 @@
 {% extends 'views/layouts/main.twig' %}
 
-{% block title %}{{ App.name }} : главная{% endblock title %}
+{% block title %}{{ App.name }} &mdash; главная{% endblock title %}
+
+{% block auxres %}
+  <link rel="stylesheet" href="{{ App.request.baseUrl~'/css/mainpage.css' }}">
+  <script src="/js/main-page.js"></script>
+  {{ Yii.void(App.clientScript.registerScriptFile(
+  App.request.baseUrl~'/js/citiesDropDown.js', constant('CClientScript::POS_END'))) }}
+{% endblock auxres %}
 
 {% block content %}
-{{ Yii.void(App.clientScript.registerCssFile(App.request.baseUrl~'/css/mainpage.css')) }}
-{{ Yii.void(App.clientScript.registerScriptFile(
-    App.request.baseUrl~'/js/citiesDropDown.js', constant('CClientScript::POS_END'))) }}
 
-<div class="form">
-{{ C.Html.beginForm(App.createUrl('site/search'), 'get') }}
-    {{ C.Html.activeTextField(model, 'word', {'name':'word', 'placeholder':'поиск по фразе'}) }}
-    {% if this.beginCache('dropDownRegion', {'duration': 3600}) %}
-        {{ C.Html.activeDropDownList(model, 'region_id', model.getRegions(),
-        {'id':'id_region', 'prompt':'область', 'name':'region'}) }}
-        {{ Yii.void(this.endCache()) }}
-    {% endif %}
-    {{ C.Html.activeDropDownList(model, 'city_id',
-        {}, {'id':'id_city', 'prompt':'город', 'name':'city'}) }}
-    {{ C.Html.submitButton('', {'name':'', 'value':'Найти'}) }}
-{{ C.Html.endForm() }}
-</div>
+  {{ C.Html.beginForm(
+    App.createUrl('site/search'),
+    'get',
+    {'class': 'form-inline clearfix'}
+  ) }}
 
-{% if this.beginCache('roots', {'duration': 3600}) %}
-    <div class="roots">
-    {% for category in categories %}
+  <div class="col-sm-4">
+  {{ C.Html.activeTextField(form, 'word', {
+    'name':'word',
+    'placeholder':'поиск по фразе',
+    'class': 'form-control'
+  }) }}
+  </div>
+
+  {% if this.beginCache('dropDownRegion', {'duration': 1}) %}
+    <div class="col-sm-3">
+      {{ C.Html.activeDropDownList(
+        form,
+        'region_id',
+        regionList,
+        {
+          'id': 'id_region',
+          'prompt': 'область',
+          'name': 'region',
+          'class': 'form-control'
+        }
+      ) }}
+    </div>
+    {{ Yii.void(this.endCache()) }}
+  {% endif %}
+
+  <div class="col-sm-3">
+    {{ C.Html.activeDropDownList(
+      form,
+      'city_id',
+      {},
+      {'id':'id_city', 'prompt':'город', 'name':'city', 'class': 'form-control'}
+    ) }}
+  </div>
+
+  <div class="col-sm-2">
+    {{ C.Html.submitButton(
+      '',
+      {
+        'name': '',
+        'value':'Найти',
+        'class':'btn btn-default pull-right'
+      }
+    ) }}
+  </div>
+
+  {{ C.Html.endForm() }}
+
+  {% if this.beginCache('roots', {'duration': 1}) %}
+    <div class="roots clearfix">
+      {% for category in categories %}
         {% if category.level == 1 %}
-        <div class="root root-{{category.root}}">
-            <span>{{ category.title }}</span>
-        </div>
+          <h3 class="root root-{{category.root}} col-sm-3">
+            <a href="{{ App.request.baseUrl~'/site/search/'~category.id }}"
+               data-root="{{category.root}}">
+              {{ category.title }}
+            </a>
+          </h3>
         {% endif %}
-    {% endfor %}
-    <div class="clear"></div>
+      {% endfor %}
     </div>
 
     {% for i in 1..10 %}
-    <div class="children root-{{i}}">
+      <div class="children root-{{ i }} clearfix" data-root="{{ i }}">
         {% for category in categories %}
-            {% if category.level != 1 and category.root == i %}
-            <div class="child">
-                <a href="{{ App.request.baseUrl~'/site/search/'~category.id }}">
-                    {{ category.title }}
-                </a>
+          {% if category.level != 1 and category.root == i %}
+            <div class="child root-{{category.root}} col-sm-3">
+              <a href="{{ App.request.baseUrl~'/site/search/'~category.id }}">
+                {{ category.title }}
+              </a>
             </div>
-            {% endif %}
+          {% endif %}
         {% endfor %}
-        <div class="clear"></div>
-    </div>
+      </div>
     {% endfor %}
     {{ Yii.void(this.endCache()) }}
-{% endif %}
+  {% endif %}
 
-{% if this.beginCache('_new', {'duration': 5}) %}
+  {% if this.beginCache('_new', {'duration': 5}) %}
     <h2>Новые объявления</h2>
-    <div class="clistview">
-    {{ this.widget('zii.widgets.CListView', {
+    <div class="new-ads clearfix">
+      {{ this.widget('zii.widgets.CListView', {
         'dataProvider':dataProvider,
         'itemView':'_new',
         'summaryText':false
-    }, true) }}
-    <div class="clear"></div>
+      }, true) }}
     </div>
     {{ Yii.void(this.endCache()) }}
-{% endif %}
-
-<script>
-    $(".roots").click(function(event){
-        event.preventDefault();
-        if ($(event.target).tagName != 'A' &&
-            !$(event.target).parent().hasClass("root")) { return; }
-        var fullClass = $(event.target).parent().attr('class');
-        var currentRoot = fullClass.match(/root-\d/g)[0];
-        $(".children").hide();
-        $(".children."+currentRoot).show();
-    });
-</script>
+  {% endif %}
 
 {% endblock content %}
