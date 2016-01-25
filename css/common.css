@@ -1,0 +1,17 @@
+.nofloat {
+    float: none;
+}
+.nopaddings {
+    padding: 0;
+}
+.main-menu {
+    padding-top: 15px;
+}
+.footer-content {
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #e7e7e7;
+}
+.content {
+    margin-bottom: 30px;
+}
