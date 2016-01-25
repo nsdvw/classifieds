@@ -1,7 +1,15 @@
-<div class="row">
-    {{ C.Html.label(form.model.getAttributeLabel(attribute), false) }}
+{#<div class="form-group">#}
+  <div class="col-sm-6 col-md-3">
+    {{ C.Html.label(form.model.getAttributeLabel(attribute), attribute~'-id') }}
     {{ C.Html.dropDownList(
-        'search['~attribute~']', value,
-        form.model.getEavVariants(attribute), {'empty':'выбрать'})
-    }}
-</div>
+      'search['~attribute~']',
+      value,
+      form.model.getEavVariants(attribute),
+      {
+        'id': attribute~'-id',
+        'empty':'выбрать',
+        'class': 'form-control'
+      }
+    ) }}
+  </div>
+{#</div>#}

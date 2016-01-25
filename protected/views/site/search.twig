@@ -1,48 +1,90 @@
 {% extends 'views/layouts/main.twig' %}
 
-{% block title %}{{ App.name }} : поиск{% endblock title %}
+{% block auxres %}
+  <link rel="stylesheet" href="{{ App.request.baseUrl~'/css/common.css' }}">
+  <link rel="stylesheet" href="{{ App.request.baseUrl~'/css/search.css' }}">
+{% endblock auxres %}
+
+{% block title %}{{ App.name }} &mdash; поиск{% endblock title %}
 
 {% block content %}
 
-{{ Yii.void(App.clientScript.registerCssFile(App.request.baseUrl~'/css/search.css')) }}
-{{ Yii.void(App.clientScript.registerScriptFile(
-    App.request.baseUrl~'/js/citiesDropDown.js', constant('CClientScript::POS_END'))) }}
-<div class="form">
-{{ C.Html.beginForm(App.createUrl('site/search/'~App.request.getQuery('id')), 'get') }}
-    <div class="row">
-    {{ C.Html.textField('word', form.word, {'placeholder':'поиск по фразе'}) }}
-    {{ C.Html.dropDownList(
-        'region_id',
-        form.region_id ? form.region_id : 'empty',
-        form.getRegions(),
-        {'empty':'область', 'id':'id_region'})
-    }}
-    {{ C.Html.dropDownList(
-        'city_id',
-        form.city_id ? form.city_id : 'empty',
-        {},
-        {'empty':'город', 'id':'id_city'})
-    }}
-    </div>
-    {% for attribute, value in form.eav %}
-        <div class="eav-wrapper">
-            {% if form.model.getEavVariants(attribute) %}
-                {% include 'views/eav/dropDownSearch.twig' %}
-            {% else %}
-                {% include 'views/eav/doubleTextInput.twig' %}
-            {% endif %}
-        </div>
-    {% endfor %}
-    <div class="clear"></div>
-    <div class="row">
-        {{ C.Html.resetButton('очистить') }}
-        {{ C.Html.submitButton('Поиск') }}
-    </div>
-    {{ C.Html.endForm() }}
-</div>
+  {{ Yii.void(App.clientScript.registerScriptFile(
+    App.request.baseUrl~'/js/citiesDropDown.js', constant('CClientScript::POS_END')))
+  }}
 
-{{ this.widget('zii.widgets.CListView', {
+  <!-- begin form -->
+  {{ C.Html.beginForm(App.createUrl(
+    'site/search/'~App.request.getQuery('id')),
+    'get',
+    {
+      'class': 'clearfix'
+    }
+  ) }}
+
+  <div class="clearfix">
+    <div class="col-sm-6">
+    {{ C.Html.textField(
+      'word',
+      form.word,
+      {
+        'placeholder':'поиск по фразе',
+        'class': 'form-control'
+      }
+    ) }}
+    </div>
+
+    <div class="col-sm-3">
+    {{ C.Html.dropDownList(
+      'region_id',
+      form.region_id ? form.region_id : 'empty',
+      regions,
+      {
+        'empty':'область',
+        'id':'id_region',
+        'class': 'form-control'
+      }
+    ) }}
+    </div>
+
+    <div class="col-sm-3">
+    {{ C.Html.dropDownList(
+      'city_id',
+      form.city_id ? form.city_id : 'empty',
+      {},
+      {
+        'empty':'город',
+        'id':'id_city',
+        'class':'form-control'
+      }
+    ) }}
+    </div>
+  </div>
+
+  <div class="eav-wrapper clearfix">
+    <div class="form-group">
+    {% for attribute, value in form.eav %}
+      {% if form.model.getEavVariants(attribute) %}
+        {% include 'views/eav/dropDownSearch.twig' %}
+      {% else %}
+        {% include 'views/eav/doubleTextInput.twig' %}
+      {% endif %}
+    {% endfor %}
+    </div>
+  </div>
+  <div class="clearfix form-buttons pull-right">
+    {{ C.Html.resetButton('очистить', {'class': 'btn btn-default'}) }}
+    {{ C.Html.submitButton('Поиск', {'class': 'btn btn-default'}) }}
+  </div>
+
+  {{ C.Html.endForm() }}
+  <!-- end form -->
+
+  {{ this.widget('zii.widgets.CListView', {
     'dataProvider':dataProvider,
-    'itemView':'_search_item'
-}, true) }}
+    'itemView':'_search_item',
+    'htmlOptions': {
+      'class': 'list-view clearfix'
+    }
+  }, true) }}
 {% endblock content %}

@@ -1,55 +1,28 @@
+.form-buttons {
+    margin: 20px 20px 0;
+}
+.eav-wrapper, .list-view {
+    margin-top: 20px;
+}
 .ad-item {
-    height: 120px;
-}
-.ad-preview {
-    background: #eee;
-    text-align: center;
-    line-height: 120px;
-    height: 100%;
-    display: block;
-}
-.thumb-small {
-    vertical-align: middle;
-}
-.image-container {
-    width: 170px;
-    height: 100%;
-    float: left;
-    text-align: center;
-}
-.ad-description {
-    margin: 0 185px;
-    height: 100%;
+    border-bottom: 1px solid #ccc;
+    padding: 15px 15px 15px 190px;
     position: relative;
 }
-.ad-title {
-    font-size: 1.25em;
-    font-weight: bold;
+.ad-preview {
+    margin-left: -175px;
 }
-.price-container {
-    width: 170px;
-    float: right;
-    height: 100%;
-}
-.ad-city {
-    font-weight: bold;
+.ad-city-added {
     position: absolute;
-    bottom: 15px;
+    bottom: 5px;
 }
-.ad-added {
+.ad-price {
+    font-size: 1.5em;
     position: absolute;
-    bottom: 0;
+    top: 20px;
+    right: 15px;
 }
-.price-container {
-    box-sizing: border-box;
-    font-size: 1.6em;
-    font-weight: bold;
-    padding: 8px;
-}
-.eav-wrapper {
-    width: 160px;
-    float: left;
-}
-.ad-item {
-    margin: 20px 0;
+h3 {
+    font-size: 1.3em;
+    margin-top: 5px;
 }
