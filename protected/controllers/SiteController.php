@@ -102,8 +102,8 @@ class SiteController extends Controller
                 $criteria->addCondition('category_id=:category_id');
                 $criteria->params[':category_id'] = intval($id);
             }
-            $form->model->attachEavSet(Category::model()->findByPk($id)->set_id);
-            $form->eav = $form->model->eavAttributes;
+            $form->model->attachEavSet($category->set_id);
+            $form->eav = $form->model->getEavAttributes();
             if (isset($_GET['search'])) {
                 $form->fill();
                 $this->buildEavCriteria($criteria);
@@ -123,6 +123,7 @@ class SiteController extends Controller
             $criteria->addCondition('city_id=:city_id');
             $criteria->params[':city_id'] = intval($city_id);
         }
+        $regions = Region::model()->getRegionList();
 
         $dp = new EavActiveDataProvider('Ad', array(
             'criteria'=>$criteria,
@@ -137,6 +138,7 @@ class SiteController extends Controller
             array(
                 'dataProvider'=>$dp,
                 'form'=>$form,
+                'regions'=>$regions,
             )
         );
     }
