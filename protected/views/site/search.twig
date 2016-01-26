@@ -85,6 +85,19 @@
     'itemView':'_search_item',
     'htmlOptions': {
       'class': 'list-view clearfix'
-    }
+    },
+    'pager': {
+      'htmlOptions': {
+        'class': 'pagination'
+      },
+      'prevPageLabel': '&laquo;',
+      'nextPageLabel': '&raquo;',
+      'firstPageCssClass': 'hidden',
+      'lastPageCssClass': 'hidden',
+      'hiddenPageCssClass': 'disabled',
+      'selectedPageCssClass': 'active',
+      'header': ''
+    },
+    'pagerCssClass': 'my-pager'
   }, true) }}
 {% endblock content %}
