@@ -62,7 +62,7 @@ class SiteController extends Controller
         $criteria = new CDbCriteria(array(
             'condition' => 'status="published"',
             'order' => 'added DESC',
-            'with' => array('author', 'category', 'city', 'photos'),
+            'with' => array('photos'),
             'limit' => 20,
         ));
         $models = Ad::model()->withEavAttributes()->findAll($criteria);
