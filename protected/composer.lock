@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ec50988dee307cd8c54bf8a51ee4b6ff",
-    "content-hash": "06a8a9a4d66fce28884388d670f014f2",
+    "hash": "e8e03efd2c60e9ca434971fdeaceed3b",
+    "content-hash": "b92ffa155ff083846900df268c26e302",
     "packages": [
         {
             "name": "fzaninotto/faker",
@@ -125,6 +125,41 @@
             "time": "2016-01-19 02:52:09"
         },
         {
+            "name": "select2/select2",
+            "version": "3.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/select2/select2",
+                "reference": "stable/3.5"
+            },
+            "type": "library"
+        },
+        {
+            "name": "silverfire/select2-bootstrap3-css",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SilverFire/select2-bootstrap3-css.git",
+                "reference": "77bf214ae0022265948bd2c52d739ea1c81853a3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SilverFire/select2-bootstrap3-css/zipball/77bf214ae0022265948bd2c52d739ea1c81853a3",
+                "reference": "77bf214ae0022265948bd2c52d739ea1c81853a3",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Bootstrap3 theme for select2 plugin",
+            "homepage": "https://github.com/SilverFire/select2-bootstrap3-css",
+            "keywords": [
+                "bootstrap",
+                "select2",
+                "styles"
+            ],
+            "time": "2015-05-25 14:31:02"
+        },
+        {
             "name": "smottt/wideimage",
             "version": "1.1.1",
             "source": {
@@ -209,16 +244,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.23.3",
+            "version": "v1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "ae53fc2c312fdee63773b75cb570304f85388b08"
+                "reference": "3e5aa30ebfbafd5951fb1b01e338e1800ce7e0e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/ae53fc2c312fdee63773b75cb570304f85388b08",
-                "reference": "ae53fc2c312fdee63773b75cb570304f85388b08",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3e5aa30ebfbafd5951fb1b01e338e1800ce7e0e8",
+                "reference": "3e5aa30ebfbafd5951fb1b01e338e1800ce7e0e8",
                 "shasum": ""
             },
             "require": {
@@ -231,7 +266,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.23-dev"
+                    "dev-master": "1.24-dev"
                 }
             },
             "autoload": {
@@ -266,7 +301,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-01-11 14:02:19"
+            "time": "2016-01-25 21:22:18"
         },
         {
             "name": "yiiext/nested-set-behavior",

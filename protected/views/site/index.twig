@@ -3,8 +3,11 @@
 {% block title %}{{ App.name }} &mdash; главная{% endblock title %}
 
 {% block auxres %}
-  <link rel="stylesheet" href="{{ App.request.baseUrl~'/css/common.css' }}">
+  <link rel="stylesheet" href="/css/select2.css">
+  <link rel="stylesheet" href="/css/select2-bootstrap.min.css">
   <link rel="stylesheet" href="{{ App.request.baseUrl~'/css/mainpage.css' }}">
+  <script src="/js/select2.js"></script>
+  <script src="/js/select2_locale_ru.js"></script>
   <script src="/js/main-page.js"></script>
   {{ Yii.void(App.clientScript.registerScriptFile(
   App.request.baseUrl~'/js/citiesDropDown.js', constant('CClientScript::POS_END'))) }}
