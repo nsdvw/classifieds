@@ -7,7 +7,7 @@
   <h3>
     <a href="{{App.request.baseUrl~'/ad/view/'~data.id}}">
       {% if data.title|length > 25 %}
-        {{data.title|slice(0,22)~'...'}}
+        {{data.title|slice(0,20)~'...'}}
       {% else %}
         {{data.title}}
       {% endif %}
