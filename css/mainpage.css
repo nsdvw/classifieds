@@ -34,26 +34,8 @@ input, select {
     margin: 8px;
 }
 
-/*
-.new-ad {
-    border: 1px solid #ccc;
-    margin: 10px 5px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    float: left;
-    height: 144px;
-    width: 172px;
+.preview img {
+    min-width: 160px;
+    min-height: 120px;
 }
-.ad-preview {
-    height: 120px;
-    background: rgb(242,242,242);
-    text-align: center;
-    line-height: 120px;
-    display: block;
-}
-.thumb-title {
-    padding: 3px;
-}
-.thumb-small {
-    vertical-align: middle;
-}*/
+
