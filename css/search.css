@@ -4,26 +4,34 @@
 .eav-wrapper, .list-view {
     margin-top: 20px;
 }
+.eav-attribute {
+    margin-bottom: 10px;
+}
 .ad-item {
     border-bottom: 1px solid #ccc;
-    padding: 15px 15px 15px 190px;
+    padding: 15px 15px 50px 190px;
     position: relative;
+    min-height: 140px;
 }
 .ad-preview {
     margin-left: -175px;
+    max-width: 160px;
+    max-height: 120px;
 }
 .ad-city-added {
     position: absolute;
-    bottom: 5px;
+    bottom: 15px;
 }
 .ad-price {
-    font-size: 1.5em;
-    position: absolute;
-    top: 20px;
-    right: 15px;
+    font-weight: bold;
+    font-size: 1.4em;
+    text-align: right;
+}
+.ad-added {
+    font-size: 0.9em;
 }
 h3 {
-    font-size: 1.3em;
+    font-size: 1.4em;
     margin-top: 5px;
 }
 .pagination>li:nth-child(2)>a {
@@ -36,4 +44,11 @@ h3 {
 }
 .my-pager {
     text-align: center;
+}
+
+@media (max-width: 767px) {
+    .ad-price {
+        text-align: left;
+        font-size: 1.2em;
+    }
 }

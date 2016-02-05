@@ -1,24 +1,23 @@
 <div class="ad-item clearfix">
-  <a href="{{App.request.baseUrl~'/ad/view/'~data.id}}">
-    <img src="{{App.request.baseUrl~'/images/thumb/'~
-         'small_'~data.photos[0].id~'_'~data.photos[0].name}}"
-         alt="photo"
-         class="img-responsive pull-left ad-preview">
+  <a href="{{'/ad/view/'~data.id}}" class="pull-left ad-preview">
+    <img src="{{ '/images/thumb/' ~
+      'small_' ~ data.photos[0].id ~ '_' ~ data.photos[0].name}}"
+         alt="{{ data.title }}"
+         class="img-responsive">
   </a>
 
-  <h3>
-    <a href="{{App.request.baseUrl~'/ad/view/'~data.id}}">{{data.title}}</a>
+  <h3 class="col-sm-8 nopaddings">
+    <a href="{{'/ad/view/'~data.id}}">{{ data.title }}</a>
   </h3>
 
-  <div class="ad-city-added">
-    <p><strong class="ad-city">{{ data.city.name }}</strong></p>
-    <p><small class="ad-added text-muted">{{ data.added }}</small></p>
-  </div>
-  <p class="ad-price">
-    <strong>
+  <div class="ad-price col-sm-4 nopaddings">
     {% if not data.isEavAttributeEmpty('price') %}
       {{ data.getEavAttribute('price')~' '~data.getAttributeUnit('price')~'.' }}
     {% endif %}
-    </strong>
-  </p>
+  </div>
+
+  <div class="ad-city-added">
+    <div class="ad-city">{{ data.city.name }}</div>
+    <time class="ad-added text-muted">{{ data.added }}</time>
+  </div>
 </div>
