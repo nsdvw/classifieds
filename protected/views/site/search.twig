@@ -1,7 +1,17 @@
 {% extends 'views/layouts/main.twig' %}
 
 {% block auxres %}
+  <link rel="stylesheet" href="/css/select2.css">
+  <link rel="stylesheet" href="/css/select2-bootstrap.min.css">
   <link rel="stylesheet" href="{{ App.request.baseUrl~'/css/search.css' }}">
+  <script src="/js/select2.js"></script>
+  <script src="/js/select2_locale_ru.js"></script>
+  <script>
+    $(function(){
+      $("#id_region").select2();
+      $("#id_city").select2();
+    });
+  </script>
 {% endblock auxres %}
 
 {% block title %}{{ App.name }} &mdash; поиск{% endblock title %}
