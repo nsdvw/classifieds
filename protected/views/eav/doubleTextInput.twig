@@ -1,34 +1,30 @@
-{#<div class="form-group">#}
-  <div class="col-sm-6 col-md-3">
-    {{ C.Html.label(
-      form.model.getAttributeLabel(attribute)
-      ~'('~form.model.getAttributeUnit(attribute)~'), от',
-      attribute~'-min-id'
-    ) }}
-    {{ C.Html.textField(
-      'search['~attribute~'][min]',
-      value['min'],
-      {
-        'id': attribute~'-min-id',
-        'class': 'form-control'
-      }
-    ) }}
-  </div>
-{#</div>#}
-{#<div class="form-group">#}
-  <div class="col-sm-6 col-md-3">
-    {{ C.Html.label(
-      form.model.getAttributeLabel(attribute)
-      ~'('~form.model.getAttributeUnit(attribute)~'), до',
-      attribute~'-max-id'
-    ) }}
-    {{ C.Html.textField(
-      'search['~attribute~'][max]',
-      value['max'],
-      {
-        'id': attribute~'-max-id',
-        'class': 'form-control'
-      }
-    ) }}
-  </div>
-{#</div>#}
+<div class="col-sm-6 col-md-3 eav-attribute">
+  {{ C.Html.label(
+    form.model.getAttributeLabel(attribute)
+    ~'('~form.model.getAttributeUnit(attribute)~'), от',
+    attribute~'-min-id'
+  ) }}
+  {{ C.Html.textField(
+    'search['~attribute~'][min]',
+    value['min'],
+    {
+      'id': attribute~'-min-id',
+      'class': 'form-control'
+    }
+  ) }}
+</div>
+<div class="col-sm-6 col-md-3 eav-attribute">
+  {{ C.Html.label(
+    form.model.getAttributeLabel(attribute)
+    ~'('~form.model.getAttributeUnit(attribute)~'), до',
+    attribute~'-max-id'
+  ) }}
+  {{ C.Html.textField(
+    'search['~attribute~'][max]',
+    value['max'],
+    {
+      'id': attribute~'-max-id',
+      'class': 'form-control'
+    }
+  ) }}
+</div>
